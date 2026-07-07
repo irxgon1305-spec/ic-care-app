@@ -1,0 +1,1297 @@
+<!--
+  ============================================================================
+  IC Care  —  a little pocket guide for eating with Interstitial Cystitis
+  ============================================================================
+
+  A single-file, front-end-only web app. No backend, no database, no storage.
+  All state lives in memory (a simple hash-router + show/hide sections).
+
+  ── HOW TO SWAP THINGS IN LATER ──────────────────────────────────────────
+  • ILLUSTRATIONS: search for  data-art-slot  — each is a placeholder <figure>
+    with an inline SVG stand-in, descriptive alt text, and an art-direction
+    comment describing the final chibi/kawaii illustration to drop in. To use a
+    real image, replace the inline <svg> with:
+        <img src="art/your-file.png" alt="(keep the alt text)" />
+  • COPY: all human-readable text lives in the HTML below (and the FOODS /
+    RECIPES data objects in the <script>). It's written to ship as-is, and is
+    grouped by section so a medical reviewer can edit in place.
+  • PALETTE / TYPE: see the :root CSS variables at the top of <style>.
+
+  ── SOURCES FOR THE MEDICAL COPY ─────────────────────────────────────────
+  Placeholder copy is paraphrased from public patient-education material from
+  the Mayo Clinic, Cleveland Clinic, and the Interstitial Cystitis Association
+  (ICA). It is intentionally gentle and non-diagnostic. Have a clinician review
+  before treating as final.
+  ============================================================================
+-->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#5C7A6B" />
+<meta name="description" content="A warm little pocket guide for eating with interstitial cystitis." />
+<title>IC Care · your cozy little food guide</title>
+
+<style>
+  /* ========================================================================
+     DESIGN TOKENS
+     ======================================================================== */
+  :root {
+    /* palette */
+    --sage:        #5C7A6B;
+    --sage-deep:   #47614F;
+    --sage-soft:   #E4EDE6;
+    --cream:       #FAF7F2;
+    --cream-card:  #FFFDFA;
+    --coral:       #C0614A;
+    --coral-soft:  #F6E3DC;
+    --rose:        #D9A6A0;
+    --rose-soft:   #F4E5E4;
+    --ink:         #3E4A42;   /* warm near-black for body text */
+    --ink-soft:    #6B7770;
+
+    /* type */
+    --font-display: "Quicksand", "Baloo 2", "Comic Sans MS", system-ui, sans-serif;
+    --font-body:    "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+    /* shape & depth */
+    --radius:    22px;
+    --radius-sm: 14px;
+    --shadow:      0 10px 30px rgba(92, 122, 107, 0.14);
+    --shadow-soft: 0 6px 18px rgba(92, 122, 107, 0.10);
+    --ring:      0 0 0 3px rgba(192, 97, 74, 0.45);
+
+    --maxw: 620px;
+  }
+
+  /* Rounded display + friendly body face. Loaded from Google Fonts if the
+     device is online; otherwise the stack falls back gracefully. */
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.7;
+    background: var(--cream);
+    /* soft layered blobs of warmth behind everything */
+    background-image:
+      radial-gradient(closest-side at 12% 8%,  rgba(217, 166, 160, 0.28), transparent),
+      radial-gradient(closest-side at 92% 4%,  rgba(92, 122, 107, 0.14),  transparent),
+      radial-gradient(closest-side at 85% 88%, rgba(217, 166, 160, 0.22), transparent);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 20px 18px 40px;
+  }
+
+  h1, h2, h3, .tile-title, .brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--sage-deep);
+    line-height: 1.25;
+    letter-spacing: 0.2px;
+  }
+
+  a { color: var(--coral); }
+
+  /* ========================================================================
+     APP HEADER
+     ======================================================================== */
+  .appbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 6px 0 2px;
+  }
+  .brand {
+    font-size: 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand .dot { color: var(--coral); }
+
+  /* ========================================================================
+     SCREEN / ROUTING
+     Screens are stacked; JS toggles [hidden]. A gentle fade-in on enter.
+     ======================================================================== */
+  .screen { display: none; }
+  .screen.is-active { display: block; animation: rise .38s cubic-bezier(.22,.9,.3,1) both; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========================================================================
+     HUB — greeting + couple art + tiles
+     ======================================================================== */
+  .hero {
+    text-align: center;
+    padding: 8px 6px 4px;
+  }
+  .hero h1 {
+    font-size: 1.9rem;
+    margin: 6px 0 4px;
+  }
+  .hero .sub {
+    margin: 0 auto;
+    max-width: 34ch;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+  }
+
+  /* decorative couple illustration slot on the hub */
+  figure[data-art-slot] {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero-art {
+    width: 190px; height: 190px;
+    filter: drop-shadow(0 8px 14px rgba(92,122,107,.16));
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 22px;
+  }
+  /* first & optional last tile span full width for rhythm */
+  .tiles .tile.span { grid-column: 1 / -1; }
+
+  .tile {
+    position: relative;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--cream-card);
+    border-radius: var(--radius);
+    padding: 18px 16px 16px;
+    box-shadow: var(--shadow-soft);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    overflow: hidden;
+  }
+  .tile:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .tile:active { transform: translateY(-1px) scale(.995); }
+  .tile:focus-visible { outline: none; box-shadow: var(--ring), var(--shadow); }
+
+  .tile .emoji {
+    font-size: 1.7rem;
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .tile-title { font-size: 1.02rem; margin: 0 0 2px; }
+  .tile .blurb { font-size: .84rem; color: var(--ink-soft); line-height: 1.45; }
+
+  /* soft blob accent tucked in the corner of each tile */
+  .tile .blob {
+    position: absolute;
+    right: -18px; top: -18px;
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    background: var(--sage-soft);
+    opacity: .7;
+    z-index: 0;
+  }
+  .tile > * { position: relative; z-index: 1; }
+  .tile:nth-child(2n) .blob { background: var(--rose-soft); }
+  .tile:nth-child(3n) .blob { background: var(--coral-soft); }
+
+  /* ========================================================================
+     SECTION SCREENS
+     ======================================================================== */
+  .backbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 10px 0 8px;
+    margin: -8px 0 4px;
+    background: linear-gradient(var(--cream) 72%, rgba(250,247,242,0));
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--sage-deep);
+    background: var(--cream-card);
+    border: 1px solid var(--sage-soft);
+    border-radius: 999px;
+    padding: 9px 16px 9px 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .back:hover { transform: translateX(-2px); }
+  .back:focus-visible { outline: none; box-shadow: var(--ring); }
+
+  .section-head { text-align: center; margin: 4px 0 18px; }
+  .section-head .emoji { font-size: 2.1rem; display: block; }
+  .section-head h2 { font-size: 1.5rem; margin: 6px 0 6px; }
+  .section-head p.lead { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); }
+
+  /* generic content card */
+  .card {
+    background: var(--cream-card);
+    border-radius: var(--radius);
+    padding: 18px 18px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 14px;
+  }
+  .card h3 { font-size: 1.1rem; margin: 2px 0 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card p:first-of-type { margin-top: 0; }
+
+  .card.accent  { background: var(--sage-soft); }
+  .card.rosecard { background: var(--rose-soft); }
+  .card.coralcard{ background: var(--coral-soft); }
+
+  /* little pull-quote / reassurance strip */
+  .hug {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--rose-soft);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: .95rem;
+  }
+  .hug .ic { font-size: 1.5rem; line-height: 1.2; }
+
+  ul.pretty { list-style: none; padding: 0; margin: 8px 0 0; }
+  ul.pretty li {
+    position: relative;
+    padding: 6px 0 6px 26px;
+    border-bottom: 1px dashed var(--sage-soft);
+  }
+  ul.pretty li:last-child { border-bottom: none; }
+  ul.pretty li::before {
+    content: "🌿";
+    position: absolute; left: 0; top: 6px;
+    font-size: .95rem;
+  }
+
+  /* ========================================================================
+     FOOD CATEGORY / CHIP GRIDS
+     ======================================================================== */
+  .food-group { margin-bottom: 16px; }
+  .food-group h3 {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 1.05rem; margin: 0 0 10px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    background: var(--cream-card);
+    border: 1.5px solid var(--sage-soft);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: .9rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-soft);
+  }
+  .chip.safe   { border-color: #BcD3c1; background: #F0F6F1; }
+  .chip.avoid  { border-color: #E7BDB2; background: var(--coral-soft); color: var(--coral); }
+
+  .food-group.safe h3  { color: var(--sage-deep); }
+  .food-group.avoid h3 { color: var(--coral); }
+
+  /* ========================================================================
+     RECIPES
+     ======================================================================== */
+  .recipe { }
+  .recipe h3 { display: flex; align-items: baseline; gap: 8px; }
+  .recipe .meta {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: .72rem;
+    color: var(--sage-deep);
+    background: var(--sage-soft);
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .recipe h4 {
+    font-family: var(--font-display);
+    font-size: .9rem;
+    color: var(--coral);
+    margin: 12px 0 6px;
+    text-transform: lowercase;
+    letter-spacing: .4px;
+  }
+  .recipe ul, .recipe ol { margin: 0; padding-left: 20px; }
+  .recipe ul li, .recipe ol li { padding: 3px 0; }
+
+  /* ========================================================================
+     FLASHCARD MODE  ("Safe or Avoid?")
+     ======================================================================== */
+  .flash-stage {
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+    margin-top: 10px;
+  }
+  .flashcard {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 3 / 4;
+    perspective: 1200px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .flash-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform .55s cubic-bezier(.22,.9,.3,1);
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped .flash-inner { transform: rotateY(180deg); }
+  .flash-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 22px;
+    gap: 10px;
+  }
+  .flash-front { background: var(--cream-card); }
+  .flash-front .food-emoji { font-size: 3.4rem; }
+  .flash-front .food-name { font-family: var(--font-display); font-size: 1.5rem; color: var(--sage-deep); }
+  .flash-front .tap-hint { font-size: .82rem; color: var(--ink-soft); }
+
+  .flash-back { transform: rotateY(180deg); color: #fff; }
+  .flash-back.safe  { background: linear-gradient(160deg, #6E9079, var(--sage)); }
+  .flash-back.avoid { background: linear-gradient(160deg, #CE7059, var(--coral)); }
+  .flash-back .verdict { font-family: var(--font-display); font-size: 1.7rem; }
+  .flash-back .why { font-size: .92rem; max-width: 26ch; opacity: .95; }
+  .flash-back .big { font-size: 2.6rem; }
+
+  .flash-controls { display: flex; gap: 10px; }
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: .95rem;
+    border-radius: 999px;
+    padding: 11px 20px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: var(--shadow-soft);
+  }
+  .btn:focus-visible { outline: none; box-shadow: var(--ring); }
+  .btn.primary { background: var(--coral); color: #fff; }
+  .btn.ghost   { background: var(--cream-card); color: var(--sage-deep); border-color: var(--sage-soft); }
+  .btn:active { transform: translateY(1px); }
+  .flash-count { font-size: .82rem; color: var(--ink-soft); }
+
+  /* ========================================================================
+     FOOTER / DISCLAIMER  (persistent)
+     ======================================================================== */
+  footer {
+    margin-top: 26px;
+    padding: 18px 16px 10px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: .8rem;
+    line-height: 1.6;
+    border-top: 1px dashed var(--sage-soft);
+  }
+  footer strong { color: var(--sage-deep); }
+  .sig { margin-top: 8px; font-family: var(--font-display); color: var(--rose); }
+
+  /* tiny sparkle decorations */
+  .sparkle { display:inline-block; animation: twinkle 2.6s ease-in-out infinite; }
+  .sparkle:nth-of-type(2){ animation-delay: .8s; }
+  @keyframes twinkle { 0%,100%{opacity:.4; transform:scale(.9);} 50%{opacity:1; transform:scale(1.15);} }
+
+  /* ========================================================================
+     ACCESSIBILITY — reduced motion
+     ======================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    .screen.is-active { animation: none; }
+    .flash-inner { transition: none; }
+  }
+
+  /* larger screens: give the hub a touch more air */
+  @media (min-width: 560px) {
+    .hero h1 { font-size: 2.2rem; }
+    .tile .blurb { font-size: .88rem; }
+  }
+</style>
+
+<div class="wrap">
+
+  <!-- ======================================================================
+       SCREEN: HUB
+       ====================================================================== -->
+  <main id="hub" class="screen is-active" aria-label="Home">
+    <section class="hero">
+
+      <!-- ART SLOT · hub couple illustration ----------------------------------
+           ART DIRECTION: two soft chibi/kawaii characters (a couple) sharing a
+           hug, one holding a little teacup of chamomile. Pastel sage + rose
+           palette, rounded shapes, gentle blush cheeks, tiny hearts floating.
+           Transparent background, ~600×600. Drop in as:
+             <img src="art/couple-hug.png" alt="A cozy cartoon couple sharing a warm hug" class="hero-art" />
+      -->
+      <figure data-art-slot="hero-couple">
+        <svg class="hero-art" viewBox="0 0 200 200" role="img"
+             aria-label="A cozy cartoon couple sharing a warm hug">
+          <!-- placeholder stand-in: two rounded blobs hugging under a heart -->
+          <circle cx="70" cy="120" r="46" fill="#E4EDE6"/>
+          <circle cx="128" cy="122" r="42" fill="#F4E5E4"/>
+          <circle cx="70" cy="92" r="24" fill="#CFE0D3"/>
+          <circle cx="128" cy="96" r="22" fill="#EBD3D0"/>
+          <!-- blush -->
+          <circle cx="60" cy="96" r="4" fill="#D9A6A0" opacity=".7"/>
+          <circle cx="80" cy="96" r="4" fill="#D9A6A0" opacity=".7"/>
+          <circle cx="119" cy="100" r="3.5" fill="#C0614A" opacity=".5"/>
+          <circle cx="137" cy="100" r="3.5" fill="#C0614A" opacity=".5"/>
+          <!-- eyes -->
+          <circle cx="64" cy="90" r="2.4" fill="#47614F"/>
+          <circle cx="76" cy="90" r="2.4" fill="#47614F"/>
+          <circle cx="123" cy="94" r="2.2" fill="#47614F"/>
+          <circle cx="133" cy="94" r="2.2" fill="#47614F"/>
+          <!-- floating heart -->
+          <path d="M100 40c-4-8-18-6-18 4 0 7 10 13 18 20 8-7 18-13 18-20 0-10-14-12-18-4z" fill="#C0614A" opacity=".85"/>
+          <text x="150" y="52" font-size="14" opacity=".6">✨</text>
+          <text x="34" y="60" font-size="12" opacity=".5">✨</text>
+        </svg>
+      </figure>
+
+      <h1>Hi lovely 💛</h1>
+      <p class="sub">A little pocket guide for eating gently.
+        Tap a card whenever you need a reminder.</p>
+    </section>
+
+    <!-- CATEGORY TILES · order mirrors the "learn → eat → do" flow ---------- -->
+    <nav class="tiles" aria-label="Sections">
+      <button class="tile span" data-goto="what-is-ic">
+        <span class="blob"></span>
+        <span class="emoji">🌼</span>
+        <span class="tile-title">What is IC?</span>
+        <span class="blurb">A plain, gentle overview — no scary words.</span>
+      </button>
+
+      <button class="tile" data-goto="flares">
+        <span class="blob"></span>
+        <span class="emoji">🌊</span>
+        <span class="tile-title">Why Flares Happen</span>
+        <span class="blurb">Triggers &amp; the flare cycle, simply.</span>
+      </button>
+
+      <button class="tile" data-goto="period">
+        <span class="blob"></span>
+        <span class="emoji">🌙</span>
+        <span class="tile-title">Around Your Period</span>
+        <span class="blurb">Why hormones can stir things up.</span>
+      </button>
+
+      <button class="tile span" data-goto="body">
+        <span class="blob"></span>
+        <span class="emoji">🫧</span>
+        <span class="tile-title">What's Happening in Your Body</span>
+        <span class="blurb">The pain &amp; urgency, explained kindly.</span>
+      </button>
+
+      <button class="tile" data-goto="safe">
+        <span class="blob"></span>
+        <span class="emoji">🥑</span>
+        <span class="tile-title">Safe Foods</span>
+        <span class="blurb">Friendly picks, grouped &amp; scannable.</span>
+      </button>
+
+      <button class="tile" data-goto="avoid">
+        <span class="blob"></span>
+        <span class="emoji">🚦</span>
+        <span class="tile-title">Foods to Avoid</span>
+        <span class="blurb">Common triggers — test gently.</span>
+      </button>
+
+      <button class="tile span" data-goto="recipes">
+        <span class="blob"></span>
+        <span class="emoji">🍲</span>
+        <span class="tile-title">Easy Recipes</span>
+        <span class="blurb">Simple, soothing meals to lean on.</span>
+      </button>
+
+      <button class="tile span" data-goto="daily">
+        <span class="blob"></span>
+        <span class="emoji">☀️</span>
+        <span class="tile-title">Gentle Daily Habits</span>
+        <span class="blurb">Little everyday things that help you feel better.</span>
+      </button>
+
+      <button class="tile span" data-goto="flash">
+        <span class="blob"></span>
+        <span class="emoji">🃏</span>
+        <span class="tile-title">Safe or Avoid? · a little game</span>
+        <span class="blurb">Flip the card to peek. Just for fun, no pressure.</span>
+      </button>
+    </nav>
+
+    <div class="hug">
+      <span class="ic">🫶</span>
+      <span>Everyone's bladder is a little different. This is a starting map,
+        not a rulebook — the real expert on your body is <em>you</em>.</span>
+    </div>
+  </main>
+
+  <!-- ======================================================================
+       SCREEN: WHAT IS IC
+       ====================================================================== -->
+  <section id="what-is-ic" class="screen" aria-label="What is IC?">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🌼</span>
+      <h2>What is IC?</h2>
+      <p class="lead">The gentle, plain-language version.</p>
+    </div>
+
+    <div class="card">
+      <p>Interstitial cystitis (IC) is a chronic bladder condition —
+        <strong>not an infection</strong> — where the bladder wall becomes
+        irritated and inflamed. It causes pelvic pain, a frequent urge to pee,
+        and sometimes burning. You might also hear it called
+        <strong>"painful bladder syndrome."</strong></p>
+      <p>The exact cause isn't fully understood, but it involves a sensitive or
+        compromised bladder lining that lets irritants reach the bladder wall.
+        It's very real, sometimes frustrating — but very manageable with the
+        right habits.</p>
+    </div>
+
+    <div class="card accent">
+      <h3>The kind reminder 🌿</h3>
+      <p>IC looks different for everyone. Some days are calm, some days are
+        loud, and both are completely normal. Living well with IC is mostly
+        about noticing your own patterns and being gentle with yourself.</p>
+    </div>
+
+    <div class="hug">
+      <span class="ic">📓</span>
+      <span><strong>Tiny habit that helps:</strong> jot down what you eat and
+        how you feel a few hours later. Over time you'll build your own personal
+        map of what your bladder loves and what it doesn't.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: WHY FLARES HAPPEN
+       ====================================================================== -->
+  <section id="flares" class="screen" aria-label="Why Flares Happen">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🌊</span>
+      <h2>Why Flares Happen</h2>
+      <p class="lead">The flare cycle, without the jargon.</p>
+    </div>
+
+    <div class="card">
+      <p>A <strong>flare</strong> is when symptoms spike for a few hours or
+        days. Flares are usually <strong>trigger-based</strong> — something sets
+        off an underlying sensitivity that's already there.</p>
+    </div>
+
+    <div class="card">
+      <h3>The most common triggers 🌊</h3>
+      <ul class="pretty">
+        <li>Certain foods &amp; drinks (coffee, alcohol, citrus, tomatoes, spicy food)</li>
+        <li>Hormonal shifts around your period</li>
+        <li>Stress and poor sleep</li>
+        <li>Holding urine too long</li>
+      </ul>
+    </div>
+
+    <div class="card rosecard">
+      <h3>Think asthma or migraines 🔁</h3>
+      <p>There's an underlying sensitivity, and specific things set it off. The
+        good news: once you know <em>your</em> triggers, flares become more
+        predictable — and easier to soften before they get loud.</p>
+    </div>
+
+    <div class="hug">
+      <span class="ic">💡</span>
+      <span>Triggers are <strong>common, not universal</strong>. Something that
+        bothers one person may be totally fine for you. Test slowly, one thing
+        at a time, and trust what your body reports back.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: AROUND YOUR PERIOD
+       ====================================================================== -->
+  <section id="period" class="screen" aria-label="Around Your Period">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🌙</span>
+      <h2>Around Your Period</h2>
+      <p class="lead">Why some days feel extra sensitive.</p>
+    </div>
+
+    <div class="card">
+      <p>Flaring right before or during your period is <strong>extremely
+        common</strong> — it's not in your head. There are two main reasons
+        behind it.</p>
+    </div>
+
+    <div class="card accent">
+      <h3>1. Hormonal shifts 🌙</h3>
+      <p>The drop in <strong>estrogen</strong> before your period makes the
+        bladder and pelvic nerves more sensitive — so everyday signals can feel
+        bigger during this window.</p>
+    </div>
+
+    <div class="card rosecard">
+      <h3>2. Prostaglandins 🌸</h3>
+      <p>The inflammatory compounds released during menstruation also irritate
+        the bladder and surrounding tissue, adding to the tenderness.</p>
+    </div>
+
+    <div class="card">
+      <h3>You can prepare for it 🤍</h3>
+      <p>Because this window is predictable, you can get ahead of it:</p>
+      <ul class="pretty">
+        <li>Go extra gentle on trigger foods 5–7 days before your period</li>
+        <li>Lean on heat — a heating pad on your lower belly is lovely</li>
+        <li>Rest more; permission granted</li>
+      </ul>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🗓️</span>
+      <span>Try noting where you are in your cycle in your food diary. Spotting
+        the pattern makes the tender days feel less surprising — and easier to
+        plan around.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: WHAT'S HAPPENING IN YOUR BODY
+       ====================================================================== -->
+  <section id="body" class="screen" aria-label="What's Happening in Your Body">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🫧</span>
+      <h2>What's Happening in Your Body</h2>
+      <p class="lead">Naming the feelings, so they feel less scary.</p>
+    </div>
+
+    <div class="card">
+      <h3>The urge with little output 💧</h3>
+      <p>Your inflamed bladder sends "full" signals to your brain even when
+        there's barely anything there. So you feel the urge, go, and little
+        comes out. The bladder is essentially <strong>over-firing its
+        signals</strong> — it's not you being dramatic.</p>
+    </div>
+
+    <div class="card">
+      <h3>The burning drips 🔥</h3>
+      <p>When urine is concentrated, it's more acidic. That acidic urine passing
+        through already-sensitive tissue burns. It can feel exactly like an
+        infection <em>even when it isn't</em>.</p>
+    </div>
+
+    <div class="card rosecard">
+      <h3>Why drinking more can hurt 🫧</h3>
+      <p>Forcing large amounts of water to "flush" fills the bladder faster and
+        adds pressure to inflamed walls. <strong>Small, steady sips</strong>
+        work better than gulping.</p>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🚑</span>
+      <span><strong>Gentle reminder:</strong> if a symptom is suddenly new or
+        much worse — fever, chills, visible blood, or severe one-sided pain —
+        that's worth a same-day call to a doctor to rule out infection.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: SAFE FOODS
+       Data-driven card build below in <script> would also work, but static
+       markup keeps it dead-simple for a reviewer to edit copy in place.
+       ====================================================================== -->
+  <section id="safe" class="screen" aria-label="Safe Foods">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🥑</span>
+      <h2>Safe Foods</h2>
+      <p class="lead">Gentle, bladder-friendly picks to build meals around.</p>
+    </div>
+
+    <div class="card accent" style="margin-bottom:18px">
+      <p style="margin:0">These are foods many people with IC tolerate well —
+        a comfy home base. Still, <strong>you're the expert on you</strong>, so
+        add anything new slowly.</p>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🍗 Proteins</h3>
+      <div class="chips">
+        <span class="chip safe">Chicken</span>
+        <span class="chip safe">Turkey</span>
+        <span class="chip safe">White fish</span>
+        <span class="chip safe">Eggs</span>
+        <span class="chip safe">Tofu</span>
+        <span class="chip safe">Mild white cheeses</span>
+      </div>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🍚 Carbs &amp; grains</h3>
+      <div class="chips">
+        <span class="chip safe">White &amp; brown rice</span>
+        <span class="chip safe">Plain pasta</span>
+        <span class="chip safe">Oats</span>
+        <span class="chip safe">Bread</span>
+        <span class="chip safe">Potatoes</span>
+        <span class="chip safe">Sweet potatoes</span>
+      </div>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🥦 Vegetables</h3>
+      <div class="chips">
+        <span class="chip safe">Broccoli</span>
+        <span class="chip safe">Zucchini</span>
+        <span class="chip safe">Green beans</span>
+        <span class="chip safe">Spinach</span>
+        <span class="chip safe">Kale</span>
+        <span class="chip safe">Carrots</span>
+        <span class="chip safe">Squash</span>
+        <span class="chip safe">Cucumber</span>
+        <span class="chip safe">Asparagus</span>
+      </div>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🍐 Fruits</h3>
+      <div class="chips">
+        <span class="chip safe">Pears (best)</span>
+        <span class="chip safe">Blueberries</span>
+        <span class="chip safe">Bananas</span>
+        <span class="chip safe">Watermelon</span>
+        <span class="chip safe">Honeydew</span>
+        <span class="chip safe">Cantaloupe</span>
+        <span class="chip safe">Peeled apples</span>
+      </div>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🥑 Fats &amp; extras</h3>
+      <div class="chips">
+        <span class="chip safe">Olive oil</span>
+        <span class="chip safe">Butter</span>
+        <span class="chip safe">Avocado</span>
+        <span class="chip safe">Plain yogurt</span>
+        <span class="chip safe">Unsweetened coconut</span>
+        <span class="chip safe">Mild honey</span>
+        <span class="chip safe">Plain almonds</span>
+      </div>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🫖 Drinks</h3>
+      <div class="chips">
+        <span class="chip safe">Plain water</span>
+        <span class="chip safe">Chamomile tea</span>
+        <span class="chip safe">Marshmallow root tea</span>
+        <span class="chip safe">Non-citrus coconut water</span>
+        <span class="chip safe">Peppermint tea</span>
+      </div>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🌿</span>
+      <span>Fresh, plain, and simple is usually the kindest. When in doubt,
+        a little bowl of rice, chicken, and steamed veg is a reliable friend.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: FOODS TO AVOID
+       ====================================================================== -->
+  <section id="avoid" class="screen" aria-label="Foods to Avoid">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🚦</span>
+      <h2>Foods to Avoid</h2>
+      <p class="lead">Common triggers to test carefully — not hard rules.</p>
+    </div>
+
+    <div class="card coralcard" style="margin-bottom:18px">
+      <p style="margin:0"><strong>Read me first:</strong> these are common
+        triggers — but everyone's different, so <strong>test carefully</strong>
+        rather than assuming all of them apply to you. Some may never bother you
+        at all. 💛</p>
+    </div>
+
+    <div class="food-group avoid">
+      <h3>☕ Drinks</h3>
+      <div class="chips">
+        <span class="chip avoid">Coffee &amp; tea</span>
+        <span class="chip avoid">Alcohol</span>
+        <span class="chip avoid">Carbonated drinks</span>
+        <span class="chip avoid">Energy drinks</span>
+        <span class="chip avoid">Cranberry juice</span>
+      </div>
+    </div>
+
+    <div class="food-group avoid">
+      <h3>🍋 Acidic fruits</h3>
+      <div class="chips">
+        <span class="chip avoid">Citrus fruits</span>
+        <span class="chip avoid">Tomatoes</span>
+        <span class="chip avoid">Strawberries</span>
+        <span class="chip avoid">Raspberries</span>
+        <span class="chip avoid">Dried fruits</span>
+      </div>
+    </div>
+
+    <div class="food-group avoid">
+      <h3>🌶️ Spicy &amp; strong flavors</h3>
+      <div class="chips">
+        <span class="chip avoid">Spicy foods</span>
+        <span class="chip avoid">Hot sauce</span>
+        <span class="chip avoid">Vinegar</span>
+        <span class="chip avoid">Soy sauce</span>
+        <span class="chip avoid">MSG</span>
+      </div>
+    </div>
+
+    <div class="food-group avoid">
+      <h3>🍫 Other common triggers</h3>
+      <div class="chips">
+        <span class="chip avoid">Chocolate</span>
+        <span class="chip avoid">Artificial sweeteners</span>
+      </div>
+    </div>
+
+    <div class="card accent">
+      <h3>A helpful trick 💡</h3>
+      <p style="margin:0">A <strong>Prelief</strong> capsule before a "maybe"
+        food can neutralize much of the acid and give you more flexibility once
+        you're feeling stable.</p>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🔬</span>
+      <span><strong>How to test safely:</strong> reintroduce one food in a small
+        amount on a calm day, then wait a day and check in. No reaction? It might
+        be a keeper. A twinge? Now you know, and that's useful — not a failure.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: GENTLE DAILY HABITS
+       ====================================================================== -->
+  <section id="daily" class="screen" aria-label="Gentle Daily Habits">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">☀️</span>
+      <h2>Gentle Daily Habits</h2>
+      <p class="lead">Small, kind things that can make each day a little easier.</p>
+    </div>
+
+    <div class="card accent" style="margin-bottom:18px">
+      <p style="margin:0">You don't have to do all of these — even one on a hard
+        day counts. Think of it as a menu of comforts, not a checklist. 💛</p>
+    </div>
+
+    <div class="card">
+      <h3>💊 Take Prelief before meals</h3>
+      <p>It neutralizes most of the food acid before it reaches your bladder,
+        giving you a little more freedom at the table.</p>
+    </div>
+
+    <div class="card">
+      <h3>💧 Sip water steadily all day</h3>
+      <p>Steady sips keep your pee less concentrated and gentler on the bladder.
+        Don't gulp large amounts at once — slow and steady is kinder.</p>
+    </div>
+
+    <div class="card">
+      <h3>🍽️ Eat smaller meals</h3>
+      <p>A very full stomach adds pressure around the bladder. Smaller, more
+        frequent meals tend to sit easier.</p>
+    </div>
+
+    <div class="card rosecard">
+      <h3>🔥 Use heat</h3>
+      <p>A heating pad on your lower belly is one of the best comfort tools there
+        is — simple, cozy, and surprisingly effective.</p>
+    </div>
+
+    <div class="card">
+      <h3>🧘 Rest and de-stress</h3>
+      <p>Stress and poor sleep both lower your bladder's threshold, so calm and
+        good rest genuinely help. Slowing down is part of feeling well.</p>
+    </div>
+
+    <div class="card">
+      <h3>📓 Track what you eat &amp; how you feel</h3>
+      <p>Your personal pattern matters most. A quick daily jot builds your own
+        trigger map over time — no perfection needed, just gentle curiosity.</p>
+    </div>
+
+    <div class="card accent">
+      <h3>🌙 Go extra gentle before your period</h3>
+      <p style="margin:0">The week before your period is a predictable tender
+        window — ease off trigger foods and lean on your comforts ahead of time.</p>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🤍</span>
+      <span>On a flare day, the only habit that matters is being soft with
+        yourself. Water, warmth, rest, and a safe snack — that's more than
+        enough.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: EASY RECIPES  (rendered from data — see RECIPES in <script>)
+       ====================================================================== -->
+  <section id="recipes" class="screen" aria-label="Easy Recipes">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🍲</span>
+      <h2>Easy Recipes</h2>
+      <p class="lead">Simple, soothing, made from safe-list friends.</p>
+    </div>
+
+    <!-- ART SLOT · little cooking vignette (optional) -----------------------
+         ART DIRECTION: tiny chibi bunny in an apron stirring a pot, steam
+         hearts rising. Same pastel palette. ~400×260, transparent bg. -->
+    <figure data-art-slot="cooking-bunny" style="margin-bottom:8px">
+      <svg viewBox="0 0 200 90" width="150" height="68" role="img"
+           aria-label="A cute cartoon bunny happily stirring a cooking pot">
+        <ellipse cx="100" cy="78" rx="46" ry="8" fill="#E4EDE6"/>
+        <rect x="74" y="52" width="52" height="26" rx="9" fill="#5C7A6B"/>
+        <rect x="70" y="48" width="60" height="8" rx="4" fill="#47614F"/>
+        <circle cx="60" cy="50" r="14" fill="#F4E5E4"/>
+        <ellipse cx="55" cy="34" rx="4" ry="11" fill="#F4E5E4"/>
+        <ellipse cx="65" cy="34" rx="4" ry="11" fill="#F4E5E4"/>
+        <circle cx="57" cy="50" r="1.8" fill="#47614F"/>
+        <circle cx="63" cy="50" r="1.8" fill="#47614F"/>
+        <text x="104" y="40" font-size="12" opacity=".7">💗</text>
+        <text x="118" y="30" font-size="9" opacity=".5">✨</text>
+      </svg>
+    </figure>
+
+    <div id="recipe-list"><!-- cards injected by JS --></div>
+
+    <div class="hug">
+      <span class="ic">🧂</span>
+      <span>Season with fresh herbs, a little olive oil, and salt instead of
+        acid or spice. Your taste buds still get a party — your bladder just
+        skips the hangover.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: FLASHCARDS  ("Safe or Avoid?")
+       ====================================================================== -->
+  <section id="flash" class="screen" aria-label="Safe or Avoid flashcards">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🃏</span>
+      <h2>Safe or Avoid?</h2>
+      <p class="lead">A tiny guessing game. Tap the card to peek — just for fun.</p>
+    </div>
+
+    <div class="flash-stage">
+      <span class="flash-count" id="flash-count" aria-live="polite"></span>
+
+      <!-- The card itself is a button so it's keyboard-operable -->
+      <button class="flashcard" id="flashcard" aria-live="polite"
+              aria-label="Flashcard. Press Enter or Space to reveal the answer.">
+        <div class="flash-inner">
+          <div class="flash-face flash-front">
+            <span class="food-emoji" id="flash-emoji">🍓</span>
+            <span class="food-name"  id="flash-name">Strawberry</span>
+            <span class="tap-hint">tap to reveal ✨</span>
+          </div>
+          <div class="flash-face flash-back" id="flash-back">
+            <span class="big" id="flash-icon">✅</span>
+            <span class="verdict" id="flash-verdict">Usually safe</span>
+            <span class="why" id="flash-why"></span>
+          </div>
+        </div>
+      </button>
+
+      <div class="flash-controls">
+        <button class="btn ghost"   id="flash-flip">Flip 🔄</button>
+        <button class="btn primary" id="flash-next">Next food →</button>
+      </div>
+    </div>
+
+    <div class="hug" style="margin-top:22px">
+      <span class="ic">🎈</span>
+      <span>No score, no streaks, no pressure. It's just a soft way to get
+        familiar with your friendly foods. Remember these are <em>common</em>
+        patterns — your body always gets the final say.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       PERSISTENT FOOTER / DISCLAIMER
+       ====================================================================== -->
+  <footer>
+    <div class="sig">made with love, for you 💛</div>
+  </footer>
+
+</div>
+
+<script>
+  /* ========================================================================
+     ROUTING  —  a tiny hash router over show/hide screens.
+     No libraries, no storage. Back/forward buttons work via `hashchange`.
+     ======================================================================== */
+  const screens = Array.from(document.querySelectorAll('.screen'));
+
+  function show(id) {
+    const target = document.getElementById(id) || document.getElementById('hub');
+    screens.forEach(s => {
+      const active = s === target;
+      s.classList.toggle('is-active', active);
+      // guard: hide inactive screens from AT & tab order
+      s.toggleAttribute('hidden', !active);
+    });
+    // scroll to top on navigation, respecting reduced-motion
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+
+    // move focus to the new screen for keyboard & screen-reader users
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+  }
+
+  // Navigate to a screen directly, then keep the URL hash in sync as a
+  // best-effort (for deep-linking / real-browser back button). We do NOT rely
+  // on a `hashchange` event firing — some sandboxed preview frames block hash
+  // updates, which would otherwise make tiles look unresponsive.
+  function navigate(id) {
+    show(id);
+    try { history.replaceState(null, '', '#' + id); } catch (_) { /* ignore */ }
+  }
+
+  function route() {
+    const id = (location.hash || '').replace('#', '') || 'hub';
+    show(id);
+  }
+
+  // tiles + back buttons navigate straight away
+  document.addEventListener('click', (e) => {
+    const goto = e.target.closest('[data-goto]');
+    const back = e.target.closest('[data-back]');
+    if (goto) { navigate(goto.dataset.goto); }
+    else if (back) { navigate('hub'); }
+  });
+
+  // still honor the browser back/forward button where hashchange works
+  window.addEventListener('hashchange', route);
+  route(); // initial paint (respects a #deep-link on load)
+
+  /* ========================================================================
+     RECIPES DATA  —  edit / add cards here. Rendered into #recipe-list.
+     Keep everything on the safe list. 4–5 recipes is the sweet spot.
+     ======================================================================== */
+  const RECIPES = [
+    {
+      name: 'Herb Baked Chicken & Rice',
+      emoji: '🍗',
+      meta: '~25 min',
+      ingredients: [
+        '2 chicken breasts',
+        '1 cup rice',
+        '2 tbsp olive oil',
+        'Garlic powder, basil, oregano, salt',
+        'Steamed broccoli, to serve',
+      ],
+      steps: [
+        'Rub chicken with olive oil, garlic powder, basil, oregano & salt.',
+        'Bake at 400°F for 20–22 min until cooked through.',
+        'Cook the rice and steam the broccoli.',
+        'Plate everything together and enjoy.',
+      ],
+    },
+    {
+      name: 'Blueberry Banana Oatmeal',
+      emoji: '🥣',
+      meta: '~10 min',
+      ingredients: [
+        '½ cup oats',
+        '1 cup water or milk',
+        '½ banana',
+        '¼ cup blueberries',
+        '1 tsp honey',
+        'Pinch of salt',
+      ],
+      steps: [
+        'Simmer oats in water or milk for 3–5 min until creamy.',
+        'Top with sliced banana and blueberries.',
+        'Drizzle with honey and enjoy warm.',
+      ],
+    },
+    {
+      name: 'Garlic Butter Salmon & Potatoes',
+      emoji: '🐟',
+      meta: '~30 min',
+      ingredients: [
+        '2 salmon fillets',
+        '2 potatoes',
+        '2 tbsp butter',
+        '2 garlic cloves',
+        'Thyme, salt',
+        'Green beans, to serve',
+      ],
+      steps: [
+        'Boil the potatoes until tender.',
+        'Sauté garlic in butter until fragrant.',
+        'Cook salmon 4 min per side, spooning over the garlic butter.',
+        'Steam the green beans and plate together.',
+      ],
+    },
+    {
+      name: 'Chicken & Vegetable Soup',
+      emoji: '🍲',
+      meta: '~35 min',
+      ingredients: [
+        '2 chicken breasts, diced',
+        '4 cups broth',
+        'Carrots, celery, zucchini',
+        '½ cup rice',
+        'Basil, salt',
+      ],
+      steps: [
+        'Boil the diced chicken in the broth until cooked.',
+        'Add the chopped veg and rice.',
+        'Simmer for 15 min; season with basil and salt.',
+      ],
+    },
+    {
+      name: 'Simple Turkey Rice Bowl',
+      emoji: '🥑',
+      meta: '~20 min',
+      ingredients: [
+        '½ lb ground turkey',
+        '1 cup rice',
+        'Spinach',
+        '½ avocado',
+        'Olive oil, garlic powder, basil, salt',
+      ],
+      steps: [
+        'Brown the turkey in olive oil with garlic powder, basil & salt.',
+        'Wilt the spinach in the pan.',
+        'Serve over rice with sliced avocado on top.',
+      ],
+    },
+  ];
+
+  // Build recipe cards
+  const recipeList = document.getElementById('recipe-list');
+  recipeList.innerHTML = RECIPES.map(r => `
+    <article class="card recipe">
+      <h3>${r.emoji} ${r.name} <span class="meta">${r.meta}</span></h3>
+      <h4>you'll need</h4>
+      <ul>${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+      <h4>how to</h4>
+      <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+    </article>
+  `).join('');
+
+  /* ========================================================================
+     FLASHCARDS DATA  —  "Safe or Avoid?" game.
+     safe: true  → friendly ; safe: false → common trigger.
+     `why` is a short, non-clinical, reassuring reason.
+     ======================================================================== */
+  const CARDS = [
+    { name: 'Pears',        emoji: '🍐', safe: true,  why: 'Pears are your friend 💚 — one of the gentlest, lowest-acid fruits.' },
+    { name: 'Blueberries',  emoji: '🫐', safe: true,  why: 'A sweet, low-acid little treat 💚' },
+    { name: 'Chicken',      emoji: '🍗', safe: true,  why: 'A reliable, gentle protein to build meals around 💚' },
+    { name: 'Rice',         emoji: '🍚', safe: true,  why: 'Soothing and plain — a comfy base for anything 💚' },
+    { name: 'Banana',       emoji: '🍌', safe: true,  why: 'Ripe banana is a mild, easy, comfy snack 💚' },
+    { name: 'Avocado',      emoji: '🥑', safe: true,  why: 'Creamy and kind — a bladder-friendly fat 💚' },
+    { name: 'Watermelon',   emoji: '🍉', safe: true,  why: 'Hydrating and refreshing — a lovely pick 💚' },
+    { name: 'Chamomile tea',emoji: '🍵', safe: true,  why: 'Warm, calming, and caffeine-free 💚' },
+    { name: 'Eggs',         emoji: '🥚', safe: true,  why: 'A mild, versatile protein most people do great with 💚' },
+    { name: 'Coffee',       emoji: '☕', safe: false, why: 'Caffeine + acid — a very common trigger. Test gently 🚦' },
+    { name: 'Orange',       emoji: '🍊', safe: false, why: 'Citrus is quite acidic. Test gently 🚦' },
+    { name: 'Tomato',       emoji: '🍅', safe: false, why: 'Acidic, and it hides in lots of sauces. Test gently 🚦' },
+    { name: 'Chocolate',    emoji: '🍫', safe: false, why: 'Contains caffeine. Test gently 🚦' },
+    { name: 'Hot sauce',    emoji: '🌶️', safe: false, why: 'Spicy heat can irritate a sensitive bladder. Test gently 🚦' },
+    { name: 'Soda',         emoji: '🥤', safe: false, why: 'Fizz, acid, and often caffeine all at once. Test gently 🚦' },
+    { name: 'Strawberries', emoji: '🍓', safe: false, why: 'Surprisingly acidic for a berry. Test gently 🚦' },
+  ];
+
+  // Flashcard state (in-memory only, per spec)
+  let order = shuffle([...CARDS.keys()]);
+  let pos = 0;
+
+  const els = {
+    card:    document.getElementById('flashcard'),
+    emoji:   document.getElementById('flash-emoji'),
+    name:    document.getElementById('flash-name'),
+    icon:    document.getElementById('flash-icon'),
+    verdict: document.getElementById('flash-verdict'),
+    why:     document.getElementById('flash-why'),
+    back:    document.getElementById('flash-back'),
+    count:   document.getElementById('flash-count'),
+  };
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function renderCard() {
+    const c = CARDS[order[pos]];
+    els.card.classList.remove('flipped');          // always show the food first
+    els.emoji.textContent = c.emoji;
+    els.name.textContent  = c.name;
+    els.verdict.textContent = c.safe ? 'Safe' : 'Test Gently';
+    els.icon.textContent    = c.safe ? '💚' : '🚦';
+    els.why.textContent     = c.why;
+    els.back.classList.toggle('safe',  c.safe);
+    els.back.classList.toggle('avoid', !c.safe);
+    els.count.textContent = `Card ${pos + 1} of ${CARDS.length}`;
+  }
+
+  function flip()  { els.card.classList.toggle('flipped'); }
+  function next()  {
+    pos = (pos + 1) % CARDS.length;
+    if (pos === 0) order = shuffle(order);         // reshuffle each full pass
+    renderCard();
+  }
+
+  els.card.addEventListener('click', flip);
+  document.getElementById('flash-flip').addEventListener('click', (e) => { e.stopPropagation(); flip(); });
+  document.getElementById('flash-next').addEventListener('click', (e) => { e.stopPropagation(); next(); });
+  renderCard();
+</script>
