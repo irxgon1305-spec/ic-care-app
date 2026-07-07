@@ -450,49 +450,110 @@
   <!-- Reusable SVG icons. Tiger lily: recurved orange petals with dark speckles
        and stamens; referenced via <use href="#tigerlily"> in the emoji slots. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="tigerlily" viewBox="0 0 24 24">
+    <symbol id="tigerlily" viewBox="0 0 48 48">
+      <defs>
+        <radialGradient id="tlPetal" cx="50%" cy="78%" r="72%">
+          <stop offset="0%"   stop-color="#FAD199"/>
+          <stop offset="42%"  stop-color="#F0A245"/>
+          <stop offset="100%" stop-color="#DA5A17"/>
+        </radialGradient>
+      </defs>
       <g>
-        <!-- 6 recurved petals, each with a couple of tiger-lily speckles -->
-        <g transform="rotate(0 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#E8813C"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <!-- 6 recurved, speckled petals (radiating from center) -->
+        <g transform="rotate(0 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <g transform="rotate(60 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#E8813C"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <g transform="rotate(60 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <g transform="rotate(120 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#E8813C"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <g transform="rotate(120 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <g transform="rotate(180 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#EF9047"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <g transform="rotate(180 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <g transform="rotate(240 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#EF9047"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <g transform="rotate(240 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <g transform="rotate(300 12 12)">
-          <path d="M12 12 C 9.6 8.6 10.1 3.2 12 1.6 C 13.9 3.2 14.4 8.6 12 12 Z" fill="#EF9047"/>
-          <circle cx="11.4" cy="8.2" r=".42" fill="#7E3417"/>
-          <circle cx="12.5" cy="6" r=".36" fill="#7E3417"/>
+        <g transform="rotate(300 24 24)">
+          <path d="M24 24 C 18 18 18.5 8 24 3.5 C 29.5 8 30 18 24 24 Z" fill="url(#tlPetal)"/>
+          <path d="M24 21 C 21.5 16.5 22 9 24 6 C 26 9 26.5 16.5 24 21 Z" fill="#fff" opacity=".18"/>
+          <g fill="#6B2410">
+            <ellipse cx="24" cy="19" rx="1.2" ry="1.5"/>
+            <ellipse cx="21.9" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="26.1" cy="15.6" rx="1" ry="1.3"/>
+            <ellipse cx="24" cy="12.4" rx=".85" ry="1.1"/>
+            <ellipse cx="22.7" cy="9.6" rx=".6" ry=".8"/>
+            <ellipse cx="25.3" cy="9.6" rx=".6" ry=".8"/>
+          </g>
         </g>
-        <!-- stamens + throat -->
-        <g stroke="#B85A2E" stroke-width=".5" stroke-linecap="round">
-          <line x1="12" y1="12" x2="14.2" y2="14.6"/>
-          <line x1="12" y1="12" x2="9.8" y2="14.6"/>
-          <line x1="12" y1="12" x2="12" y2="15.4"/>
+
+        <!-- warm throat -->
+        <circle cx="24" cy="24" r="3.3" fill="#CF521A"/>
+        <circle cx="24" cy="24" r="1.7" fill="#8C3714"/>
+
+        <!-- stamens splaying out between the petals -->
+        <g stroke="#C56A24" stroke-width="1" fill="none" stroke-linecap="round">
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(30 24 24)"/>
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(90 24 24)"/>
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(150 24 24)"/>
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(210 24 24)"/>
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(270 24 24)"/>
+          <path d="M24 24 Q 23.2 15 24 10.5" transform="rotate(330 24 24)"/>
         </g>
-        <circle cx="14.2" cy="14.6" r=".7" fill="#8A3B1E"/>
-        <circle cx="9.8" cy="14.6" r=".7" fill="#8A3B1E"/>
-        <circle cx="12" cy="15.4" r=".7" fill="#8A3B1E"/>
-        <circle cx="12" cy="12" r="1.5" fill="#C0614A"/>
+        <g fill="#6E2A12">
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(30 24 24) rotate(20 24 9.8)"/>
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(90 24 24) rotate(20 24 9.8)"/>
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(150 24 24) rotate(20 24 9.8)"/>
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(210 24 24) rotate(20 24 9.8)"/>
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(270 24 24) rotate(20 24 9.8)"/>
+          <ellipse cx="24" cy="9.8" rx="1.5" ry="2.6" transform="rotate(330 24 24) rotate(20 24 9.8)"/>
+        </g>
       </g>
     </symbol>
   </svg>
@@ -524,23 +585,23 @@
           <!-- PANDA (white) — hugging from the upper right, drawn first so the
                bear sits in front of it -->
           <g>
-            <circle cx="132" cy="98"  r="28" fill="#FDFDFB" stroke="#ECE7DF" stroke-width="1.2"/>
-            <circle cx="114" cy="78"  r="9.5" fill="#3E4A42"/>
-            <circle cx="150" cy="78"  r="9.5" fill="#3E4A42"/>
-            <!-- eye patches -->
-            <ellipse cx="123" cy="97" rx="6" ry="8.5" fill="#3E4A42" transform="rotate(22 123 97)"/>
-            <ellipse cx="141" cy="97" rx="6" ry="8.5" fill="#3E4A42" transform="rotate(-22 141 97)"/>
-            <!-- eyes -->
-            <circle cx="124" cy="99" r="2.6" fill="#fff"/>
-            <circle cx="124.4" cy="99.6" r="1.4" fill="#2B241F"/>
-            <circle cx="140" cy="99" r="2.6" fill="#fff"/>
-            <circle cx="139.6" cy="99.6" r="1.4" fill="#2B241F"/>
-            <!-- nose + smile -->
-            <ellipse cx="132" cy="107" rx="2.6" ry="1.8" fill="#3E4A42"/>
-            <path d="M132 109 q-3 4 -6 3 M132 109 q3 4 6 3" stroke="#3E4A42" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-            <!-- blush -->
-            <circle cx="116" cy="106" r="4" fill="#E7A9A0" opacity=".6"/>
-            <circle cx="148" cy="106" r="4" fill="#E7A9A0" opacity=".6"/>
+            <circle cx="132" cy="99"  r="29" fill="#FDFDFB" stroke="#ECE7DF" stroke-width="1.2"/>
+            <circle cx="113" cy="79"  r="10" fill="#3E4A42"/>
+            <circle cx="151" cy="79"  r="10" fill="#3E4A42"/>
+            <!-- eye patches (bigger, rounder) -->
+            <ellipse cx="122" cy="99" rx="7" ry="9.5" fill="#3E4A42" transform="rotate(18 122 99)"/>
+            <ellipse cx="142" cy="99" rx="7" ry="9.5" fill="#3E4A42" transform="rotate(-18 142 99)"/>
+            <!-- big glossy eyes -->
+            <circle cx="123" cy="100" r="3.6" fill="#fff"/>
+            <circle cx="121.9" cy="102.4" r="1.6" fill="#fff"/>
+            <circle cx="141" cy="100" r="3.6" fill="#fff"/>
+            <circle cx="139.9" cy="102.4" r="1.6" fill="#fff"/>
+            <!-- nose + soft smile -->
+            <ellipse cx="132" cy="108" rx="2.7" ry="1.9" fill="#3E4A42"/>
+            <path d="M132 110.5 q-3.5 4 -7 2.3 M132 110.5 q3.5 4 7 2.3" stroke="#3E4A42" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <!-- bigger blush -->
+            <circle cx="114" cy="108" r="5.2" fill="#E7A9A0" opacity=".7"/>
+            <circle cx="150" cy="108" r="5.2" fill="#E7A9A0" opacity=".7"/>
           </g>
 
           <!-- BEAR (brown) — cuddled in front -->
@@ -552,14 +613,18 @@
             <circle cx="97" cy="99"  r="5"  fill="#8E6A44"/>
             <!-- muzzle -->
             <ellipse cx="82" cy="134" rx="15" ry="11" fill="#EAD6B6"/>
-            <ellipse cx="82" cy="129" rx="3.2" ry="2.2" fill="#6E4A2B"/>
-            <path d="M82 131 q0 4 -4 5 M82 131 q0 4 4 5" stroke="#6E4A2B" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-            <!-- content closed eyes -->
-            <path d="M64 118 q5 -5 10 0" stroke="#5B3F27" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M88 116 q5 -5 10 0" stroke="#5B3F27" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <!-- blush -->
-            <circle cx="64" cy="131" r="4.6" fill="#E29A90" opacity=".7"/>
-            <circle cx="100" cy="129" r="4.6" fill="#E29A90" opacity=".7"/>
+            <ellipse cx="82" cy="129" rx="3.4" ry="2.4" fill="#6E4A2B"/>
+            <path d="M82 131.4 q0 3.8 -3.8 4.8 M82 131.4 q0 3.8 3.8 4.8" stroke="#6E4A2B" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <!-- big shiny round eyes -->
+            <circle cx="69" cy="119" r="4.6" fill="#3B2A1A"/>
+            <circle cx="70.7" cy="117.2" r="1.8" fill="#fff"/>
+            <circle cx="67.2" cy="120.7" r=".9" fill="#fff"/>
+            <circle cx="93" cy="117" r="4.6" fill="#3B2A1A"/>
+            <circle cx="94.7" cy="115.2" r="1.8" fill="#fff"/>
+            <circle cx="91.2" cy="118.7" r=".9" fill="#fff"/>
+            <!-- bigger blush -->
+            <circle cx="62" cy="130" r="5.6" fill="#E29A90" opacity=".78"/>
+            <circle cx="101" cy="128" r="5.6" fill="#E29A90" opacity=".78"/>
           </g>
 
           <!-- PANDA hugging arm, wrapping over the bear (drawn on top) -->
@@ -584,7 +649,7 @@
         </svg>
       </figure>
 
-      <h1>Hi lovely 💗</h1>
+      <h1>Hi beautiful 💗</h1>
       <p class="sub">A little pocket guide for eating gently.
         Tap a card whenever you need a reminder.</p>
     </section>
