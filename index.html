@@ -257,6 +257,12 @@
   .section-head h2 { font-size: 1.5rem; margin: 6px 0 6px; }
   .section-head p.lead { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); }
 
+  /* in-section divider heading (used in the combined Food Guide) */
+  .subhead { text-align: center; margin: 28px 0 10px; }
+  .subhead .emoji { font-size: 1.9rem; display: block; }
+  .subhead h3 { font-size: 1.3rem; margin: 4px 0 4px; }
+  .subhead p.lead { margin: 0 auto; max-width: 40ch; color: var(--ink-soft); font-size: .95rem; }
+
   /* generic content card */
   .card {
     background: var(--cream-card);
@@ -981,15 +987,8 @@
       <button class="tile" data-goto="safe">
         <span class="blob"></span>
         <span class="emoji">🥑</span>
-        <span class="tile-title">Safe Foods</span>
-        <span class="blurb">Friendly picks, grouped &amp; scannable.</span>
-      </button>
-
-      <button class="tile" data-goto="avoid">
-        <span class="blob"></span>
-        <span class="emoji">🚦</span>
-        <span class="tile-title">Foods to Avoid</span>
-        <span class="blurb">Common triggers — test gently.</span>
+        <span class="tile-title">Food Guide</span>
+        <span class="blurb">Safe picks &amp; common triggers, together.</span>
       </button>
 
       <button class="tile" data-goto="recipes">
@@ -1021,12 +1020,6 @@
         <span class="blurb">Festive IC-safe recipes to decorate.</span>
       </button>
 
-      <button class="tile" data-goto="nightplan">
-        <span class="blob"></span>
-        <span class="emoji">🎃</span>
-        <span class="tile-title">Halloween Night Plan</span>
-        <span class="blurb">Little moves for a comfy night out.</span>
-      </button>
 
       <button class="tile" data-goto="flarekit">
         <span class="blob"></span>
@@ -1128,16 +1121,14 @@
   </section>
 
   <!-- ======================================================================
-       SCREEN: SAFE FOODS
-       Data-driven card build below in <script> would also work, but static
-       markup keeps it dead-simple for a reviewer to edit copy in place.
+       SCREEN: FOOD GUIDE  (safe foods + common triggers, combined)
        ====================================================================== -->
-  <section id="safe" class="screen" aria-label="Safe Foods">
+  <section id="safe" class="screen" aria-label="Food Guide">
     <div class="backbar"><button class="back" data-back>← Back home</button></div>
     <div class="section-head">
       <span class="emoji">🥑</span>
-      <h2>Safe Foods</h2>
-      <p class="lead">Gentle, bladder-friendly picks to build meals around.</p>
+      <h2>Food Guide</h2>
+      <p class="lead">Friendly picks and common triggers, all in one place.</p>
     </div>
 
     <div class="card accent" style="margin-bottom:18px">
@@ -1227,17 +1218,11 @@
       <span>Fresh, plain, and simple is usually the kindest. When in doubt,
         a little bowl of rice, chicken, and steamed veg is a reliable friend.</span>
     </div>
-  </section>
 
-  <!-- ======================================================================
-       SCREEN: FOODS TO AVOID
-       ====================================================================== -->
-  <section id="avoid" class="screen" aria-label="Foods to Avoid">
-    <div class="backbar"><button class="back" data-back>← Back home</button></div>
-    <div class="section-head">
+    <div class="subhead">
       <span class="emoji">🚦</span>
-      <h2>Foods to Avoid</h2>
-      <p class="lead">Common triggers to test carefully — not hard rules.</p>
+      <h3>Common triggers — test gently</h3>
+      <p class="lead">Common, not universal — not hard rules.</p>
     </div>
 
     <div class="card coralcard" style="margin-bottom:18px">
@@ -1503,34 +1488,6 @@
   </section>
 
   <!-- ======================================================================
-       SCREEN: HALLOWEEN NIGHT PLAN 🎃
-       ====================================================================== -->
-  <section id="nightplan" class="screen" aria-label="Halloween Night Plan">
-    <div class="backbar"><button class="back" data-back>← Back home</button></div>
-    <div class="section-head">
-      <span class="emoji">🎃</span>
-      <h2>Halloween Night Plan</h2>
-      <p class="lead">A few little moves for a comfy night.</p>
-    </div>
-
-    <div class="card">
-      <ul class="pretty">
-        <li>Eat a real meal before going out, with protein and carbs — like chicken and rice or a plain burger.</li>
-        <li>Drink water between drinks. Alcohol is a common trigger, so fewer drinks means fewer flare risks.</li>
-        <li>Skip citrus, cranberry, and energy-drink mixers.</li>
-        <li>Find the bathroom early, and go when you need to. Don't hold it.</li>
-        <li>Bring the flare kit.</li>
-      </ul>
-    </div>
-
-    <div class="card accent">
-      <h3>🧳 Pack ahead</h3>
-      <p>Your flare kit is a tap away — tick things off as you get ready.</p>
-      <button class="btn ghost" data-goto="flarekit">Open the flare kit →</button>
-    </div>
-  </section>
-
-  <!-- ======================================================================
        SCREEN: TRAVEL FLARE KIT 🧳   (checklist persisted: icapp_kit_checklist)
        ====================================================================== -->
   <section id="flarekit" class="screen" aria-label="Travel Flare Kit">
@@ -1601,6 +1558,14 @@
         <li>Meant to help prevent UTIs, not IC. It doesn't calm bladder-wall irritation.</li>
         <li>Research is mixed: some studies found fewer repeat UTIs, and a larger 2024 trial found no benefit.</li>
         <li><strong>It does not treat an active UTI.</strong> It's never a reason to skip getting checked.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🗓️ Birth Control</h3>
+      <ul class="pretty">
+        <li>Part of the daily routine — take it at the same time each day so it's easy to remember.</li>
+        <li>Keep it on the list you show anyone who prescribes something new.</li>
       </ul>
     </div>
 
