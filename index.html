@@ -995,8 +995,8 @@
       <button class="tile" data-goto="recipes">
         <span class="blob"></span>
         <span class="emoji">🍲</span>
-        <span class="tile-title">Easy Recipes</span>
-        <span class="blurb">Simple, soothing meals to lean on.</span>
+        <span class="tile-title">Cozy Cooking</span>
+        <span class="blurb">From-scratch comfort dishes to make.</span>
       </button>
 
       <button class="tile" data-goto="daily">
@@ -1381,12 +1381,12 @@
   <!-- ======================================================================
        SCREEN: EASY RECIPES  (rendered from data — see RECIPES in <script>)
        ====================================================================== -->
-  <section id="recipes" class="screen" aria-label="Easy Recipes">
+  <section id="recipes" class="screen" aria-label="Cozy Cooking">
     <div class="backbar"><button class="back" data-back>← Back home</button></div>
     <div class="section-head">
       <span class="emoji">🍲</span>
-      <h2>Easy Recipes</h2>
-      <p class="lead">Simple, soothing, made from safe-list friends.</p>
+      <h2>Cozy Cooking</h2>
+      <p class="lead">Fuller recipes for when you feel like cooking — all IC-safe.</p>
     </div>
 
     <!-- ART SLOT · little cooking vignette (optional) -----------------------
@@ -1470,9 +1470,9 @@
 
     <div class="card accent">
       <h3>🎃 Pumpkin &amp; squash are usually IC-friendly</h3>
-      <p>Two cozy recipes — roasted butternut squash and pumpkin oat bars —
-        are waiting for you in Easy Recipes.</p>
-      <button class="btn ghost" data-goto="recipes">See the pumpkin recipes →</button>
+      <p>Butternut squash is the star of the from-scratch ravioli waiting for you
+        over in Cozy Cooking.</p>
+      <button class="btn ghost" data-goto="recipes">See the squash recipe →</button>
     </div>
   </section>
 
@@ -1681,124 +1681,106 @@
      ======================================================================== */
   const RECIPES = [
     {
-      name: 'Herb Baked Chicken & Rice',
-      emoji: '🍗',
-      meta: '~25 min',
-      ingredients: [
-        '2 chicken breasts',
-        '1 cup rice',
-        '2 tbsp olive oil',
-        'Garlic powder, basil, oregano, salt',
-        'Steamed broccoli, to serve',
-      ],
-      steps: [
-        'Rub chicken with olive oil, garlic powder, basil, oregano & salt.',
-        'Bake at 400°F for 20–22 min until cooked through.',
-        'Cook the rice and steam the broccoli.',
-        'Plate everything together and enjoy.',
-      ],
-    },
-    {
-      name: 'Blueberry Banana Oatmeal',
-      emoji: '🥣',
-      meta: '~10 min',
-      ingredients: [
-        '½ cup oats',
-        '1 cup water or milk',
-        '½ banana',
-        '¼ cup blueberries',
-        '1 tsp honey',
-        'Pinch of salt',
-      ],
-      steps: [
-        'Simmer oats in water or milk for 3–5 min until creamy.',
-        'Top with sliced banana and blueberries.',
-        'Drizzle with honey and enjoy warm.',
-      ],
-    },
-    {
-      name: 'Garlic Butter Chicken & Potatoes',
-      emoji: '🧈',
-      meta: '~30 min',
-      ingredients: [
-        '2 chicken breasts (or thighs)',
-        '2 potatoes',
-        '2 tbsp butter',
-        '2 garlic cloves',
-        'Thyme, salt',
-        'Green beans, to serve',
-      ],
-      steps: [
-        'Boil the potatoes until tender.',
-        'Sauté garlic in butter until fragrant.',
-        'Cook chicken 5–6 min per side, spooning over the garlic butter.',
-        'Steam the green beans and plate together.',
-      ],
-    },
-    {
-      name: 'Chicken & Vegetable Soup',
-      emoji: '🍲',
-      meta: '~35 min',
+      name: 'Creamy Chicken & Asparagus Risotto',
+      emoji: '🍚',
+      meta: '~45 min',
       ingredients: [
         '2 chicken breasts, diced',
-        '4 cups broth',
-        'Carrots, celery, zucchini',
-        '½ cup rice',
-        'Basil, salt',
+        '1 cup arborio rice',
+        '4 cups warm low-sodium chicken broth',
+        '1 bunch asparagus, trimmed & cut',
+        '2 tbsp butter + 1 tbsp olive oil',
+        '1 clove garlic, minced',
+        '¼ cup grated mild parmesan',
+        'Fresh parsley, salt',
       ],
       steps: [
-        'Boil the diced chicken in the broth until cooked.',
-        'Add the chopped veg and rice.',
-        'Simmer for 15 min; season with basil and salt.',
+        'Sear the diced chicken in the olive oil until golden; set aside.',
+        'In the same pan, melt the butter, soften the garlic, then toast the rice 1–2 min.',
+        'Add the warm broth one ladle at a time, stirring and letting each absorb before the next (~20 min).',
+        'Halfway through, stir in the asparagus so it cooks tender.',
+        'Fold the chicken back in with the parmesan; finish with parsley and salt.',
       ],
     },
     {
-      name: 'Simple Turkey Rice Bowl',
-      emoji: '🥑',
-      meta: '~20 min',
+      name: 'Spinach & Ricotta Stuffed Chicken',
+      emoji: '🍗',
+      meta: '~50 min',
       ingredients: [
-        '½ lb ground turkey',
-        '1 cup rice',
-        'Spinach',
-        '½ avocado',
-        'Olive oil, garlic powder, basil, salt',
+        '2 large chicken breasts',
+        '1 cup spinach, wilted & chopped',
+        '½ cup ricotta',
+        '2 tbsp grated mild parmesan',
+        '2 tbsp butter + a little olive oil',
+        'Thyme, parsley, salt',
+        'Mashed sweet potato or rice, to serve',
       ],
       steps: [
-        'Brown the turkey in olive oil with garlic powder, basil & salt.',
-        'Wilt the spinach in the pan.',
-        'Serve over rice with sliced avocado on top.',
+        'Butterfly each chicken breast and gently pound to an even thickness.',
+        'Mix the spinach, ricotta, parmesan, herbs and a pinch of salt.',
+        'Spoon the filling over each breast, roll up, and secure with toothpicks.',
+        'Sear the rolls in butter + oil on all sides until golden.',
+        'Finish in a 375°F oven ~20 min until cooked through; rest, then slice.',
       ],
     },
     {
-      name: 'Roasted Butternut Squash',
-      emoji: '🎃',
-      meta: '~30 min',
+      name: 'Butternut Squash Ravioli, Sage Butter',
+      emoji: '🥟',
+      meta: '~1 hr 15 min',
       ingredients: [
-        'Butternut squash, peeled & cubed',
-        'Olive oil',
-        'A pinch of salt',
+        'Pasta dough: 2 cups flour, 3 eggs, pinch of salt',
+        '2 cups roasted butternut squash, mashed',
+        '½ cup ricotta',
+        '3 tbsp butter + a few fresh sage leaves',
+        'Mild parmesan, salt',
       ],
       steps: [
-        'Toss the squash cubes in olive oil and a pinch of salt.',
-        'Roast at 400°F for 25–30 minutes until golden.',
+        'Make the dough: mound the flour, add the eggs, and knead ~8 min until smooth; rest 30 min.',
+        'Mix the mashed squash with ricotta and a little salt for the filling.',
+        'Roll the dough thin, dot with filling, lay a second sheet over, and cut into ravioli; press the edges sealed.',
+        'Boil in salted water 3–4 min, until they float.',
+        'Gently brown the butter with the sage, then toss the ravioli through; finish with parmesan.',
       ],
     },
     {
-      name: 'Pumpkin Oat Bars',
-      emoji: '🧡',
-      meta: '~25 min',
+      name: 'Homemade Chicken Pot Pie',
+      emoji: '🥧',
+      meta: '~1 hr',
       ingredients: [
-        'Oats',
-        'Plain canned pumpkin (not pie filling)',
-        'Banana',
-        'A little maple syrup',
-        'A light pinch of cinnamon',
+        '2 chicken breasts, cooked & shredded',
+        '1 potato + 2 carrots, diced',
+        '½ cup peas',
+        '3 tbsp butter + 3 tbsp flour',
+        '2 cups milk + ½ cup chicken broth',
+        '1 sheet pie pastry (or homemade)',
+        'Thyme, parsley, salt',
       ],
       steps: [
-        'Mash the banana, then stir in pumpkin, oats, maple syrup & cinnamon.',
-        'Spread into a pan and bake at 350°F for about 25 minutes.',
+        'Simmer the potato and carrots until just tender; add the peas at the end.',
+        'Make a roux: melt the butter, whisk in the flour, then slowly add the milk & broth to a creamy sauce.',
+        'Stir in the chicken, vegetables, herbs and salt.',
+        'Spoon into a dish, lay the pastry over the top, crimp the edges, and cut a few steam vents.',
+        'Bake at 400°F for ~25–30 min until the crust is golden.',
       ],
-      note: 'Go light on spices, and skip chocolate chips.',
+    },
+    {
+      name: 'Pear & Almond Galette',
+      emoji: '🍐',
+      meta: '~1 hr',
+      ingredients: [
+        'Pastry: 1¼ cups flour, ½ cup cold butter, 2–3 tbsp cold water, pinch salt',
+        '3 ripe pears, peeled & thinly sliced',
+        'Frangipane: ½ cup ground almonds, 3 tbsp butter, 1 egg, 2 tbsp honey',
+        '1 egg, for brushing',
+      ],
+      steps: [
+        'Rub the cold butter into the flour & salt, add water, bring to a dough, and chill 30 min.',
+        'Beat the frangipane: cream the butter & honey, then mix in the egg and ground almonds.',
+        'Roll the pastry into a rough circle and spread the frangipane in the center, leaving a border.',
+        'Fan the pear slices over the top and fold the border up over the edges.',
+        'Brush with beaten egg and bake at 375°F for ~30–35 min until golden.',
+      ],
+      note: 'A drizzle of honey instead of chocolate keeps it IC-gentle.',
     },
   ];
 
@@ -1838,20 +1820,22 @@
       decorate: 'Leave gaps in the "bandages" so the chicken peeks through — that\'s where the eyes go.',
     },
     {
-      name: 'Ghostly Mashed Potato Clouds',
-      emoji: '👻',
+      name: 'Witch-Finger Breadsticks',
+      emoji: '🧙',
       meta: '~30 min',
       ingredients: [
-        'Potatoes',
-        'Butter, a splash of milk, salt',
-        'Blueberries, for eyes',
+        'Refrigerated bread or pizza dough',
+        'Sliced almonds (for "nails")',
+        'Butter, melted',
+        'Salt',
       ],
       steps: [
-        'Boil and mash the potatoes with butter, milk and salt until smooth.',
-        'Pipe or spoon tall "ghost" mounds onto a tray; bake at 400°F for ~12 min to lightly set.',
-        'Press in blueberries for little eyes.',
+        'Roll pieces of dough into long, slightly knobbly finger shapes.',
+        'Press a sliced almond into the tip of each for a nail, and score a few knuckle lines with a knife.',
+        'Brush with melted butter and a pinch of salt.',
+        'Bake at 400°F for ~12–15 min until golden.',
       ],
-      decorate: 'Pipe them tall and wobbly — the lumpier, the cuter. Blueberry eyes keep it IC-safe.',
+      decorate: 'The knuckle scoring and almond "nails" make them wonderfully creepy — a bowl of plain yogurt dip looks ghostly alongside.',
     },
     {
       name: "Jack-o'-Lantern Stuffed Squash",
