@@ -630,6 +630,8 @@
   .plan-link:hover { text-decoration: underline; }
   .plan.someday .plan-date { background: var(--rose-soft); color: var(--coral); }
   .plan.someday .plan-date .d-day { font-size: 1.2rem; }
+  .plan-detail { margin: 2px 0 0; font-size: .82rem; color: var(--ink-soft); }
+  .year-divider { text-align: center; font-family: var(--font-display); font-weight: 700; letter-spacing: 2px; font-size: .85rem; color: var(--ink-soft); opacity: .85; margin: 20px 0 10px; }
 
   /* ---- "When it's not just a flare" — CALM in BOTH themes ---- */
   .calm-screen .section-head h2,
@@ -2042,11 +2044,19 @@
   const FALLBACK_EVENTS = [
     { title: 'Trip to Salem 🍂',          start: '2026-10-16', end: '2026-10-18',
       link: 'https://irxgon1305.notion.site/Saleem-2026-3ea68f714e108027ac5cf7c93a8bdfc2?source=copy_link' },
-    { title: '6-month anniversary dinner 🕯️', start: '2026-10-20' },
+    { title: '6-month anniversary dinner 🕯️', start: '2026-10-20',
+      detail: 'Pink Tiger at The Wharf · 8:00 PM',
+      link: 'https://www.pinktigerdc.com', linkLabel: 'See Pink Tiger →' },
     { title: 'Winery with her parents 🍇', start: '2026-10-24',
       link: 'https://barreloak.com/', linkLabel: 'Visit the winery →' },
+    { title: 'Drunk Dracula 🧛',          start: '2026-10-29',
+      detail: 'The Sage Theatre · 7:00 PM · stage-side seats',
+      link: 'https://drunkdracula.com', linkLabel: 'See the show →' },
     { title: 'Medellín, Colombia ✈️',      start: '2026-11-18', end: '2026-11-24' },
     { title: 'Thanksgiving with her parents 🦃', start: '2026-11-26' },
+    { title: 'Dracula ballet 🩰🖤',        start: '2027-02-14',
+      detail: "Valentine's Day · Harman Hall · 2:00 PM",
+      link: 'https://www.washingtonballet.org/events/dracula/', linkLabel: 'See the ballet →' },
   ];
 
   // Trips we're dreaming up but haven't dated yet. `when` is free text;
@@ -2089,14 +2099,20 @@
     function render(events) {
       const now = new Date(); now.setHours(0,0,0,0);
       const upcoming = events
-        .map(ev => ({ title: ev.title, link: ev.link, linkLabel: ev.linkLabel, _s: parseDate(ev.start), _e: parseDate(ev.end) }))
+        .map(ev => ({ title: ev.title, link: ev.link, linkLabel: ev.linkLabel, detail: ev.detail, _s: parseDate(ev.start), _e: parseDate(ev.end) }))
         .filter(ev => ev._s && (ev._s >= now || (ev._e && ev._e >= now)))
         .sort((a, b) => a._s - b._s);
       if (!upcoming.length) {
         list.innerHTML = '<div class="card"><p style="margin:0;text-align:center">No dated plans right now — check "Someday soon" below 💕</p></div>';
         return;
       }
-      list.innerHTML = upcoming.map(ev => `
+      let lastYear = null;
+      list.innerHTML = upcoming.map(ev => {
+        const yr = ev._s.getFullYear();
+        // subtle year divider the first time a new year appears in the list
+        const divider = (lastYear !== null && yr !== lastYear) ? `<div class="year-divider">${yr}</div>` : '';
+        lastYear = yr;
+        return divider + `
         <article class="card plan">
           <div class="plan-date">
             <span class="d-mon">${MON[ev._s.getMonth()]}</span>
@@ -2105,9 +2121,11 @@
           <div class="plan-body">
             <h3>${esc(ev.title)}</h3>
             <p class="plan-when">${weekdays(ev._s, ev._e)} · ${relative(ev._s)}</p>
+            ${ev.detail ? `<p class="plan-detail">${esc(ev.detail)}</p>` : ''}
             ${linkBtn(ev.link, ev.linkLabel)}
           </div>
-        </article>`).join('');
+        </article>`;
+      }).join('');
     }
 
     function renderSomeday(items) {
@@ -2138,8 +2156,10 @@
           if (allDay && end) { const d = new Date(end + 'T00:00:00'); d.setDate(d.getDate() - 1); end = d.toISOString().slice(0, 10); }
           // use the event's own location/description URL as the itinerary link
           const m = String(it.description || '').match(/https?:\/\/[^\s"'<>]+/);
-          const link = (it.location && /^https?:\/\//.test(it.location)) ? it.location : (m ? m[0] : '');
-          return { title: it.summary || 'Plan', start: (it.start && (it.start.date || it.start.dateTime)) || '', end, link };
+          const locIsUrl = it.location && /^https?:\/\//.test(it.location);
+          const link = locIsUrl ? it.location : (m ? m[0] : '');
+          const detail = (it.location && !locIsUrl) ? it.location : '';
+          return { title: it.summary || 'Plan', start: (it.start && (it.start.date || it.start.dateTime)) || '', end, detail, link };
         }).filter(e => e.start);
         if (evs.length) { render(evs); if (note) note.textContent = 'Synced from your shared calendar 🗓️'; }
       }).catch(() => { /* keep the fallback list */ });
