@@ -28,6 +28,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#5C7A6B" />
 <meta name="description" content="A warm little pocket guide for eating with interstitial cystitis." />
+<!-- private app — keep out of search engines -->
+<meta name="robots" content="noindex, nofollow" />
 <title>IC Care · your cozy little food guide</title>
 
 <style>
@@ -64,7 +66,7 @@
 
   /* Rounded display + friendly body face. Loaded from Google Fonts if the
      device is online; otherwise the stack falls back gracefully. */
-  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Creepster&display=swap');
 
   * { box-sizing: border-box; }
 
@@ -443,7 +445,236 @@
     .hero h1 { font-size: 2.2rem; }
     .tile .blurb { font-size: .88rem; }
   }
+
+  /* ========================================================================
+     🎃 HALLOWEEN "SPOOKY MODE"   (applied via <html data-theme="spooky">)
+     Classic theme leaves every token below untouched, so it renders exactly
+     as before. Spooky mode re-paints by overriding the SAME custom properties,
+     plus the few components that use hard-coded colors.
+     ======================================================================== */
+  :root {
+    --hw-bg:        #1A1418;
+    --hw-surface:   #2A1F27;
+    --hw-pink:      #F7C6D9;
+    --hw-pink-deep: #E58FB4;
+    --hw-plum:      #4A2A40;
+    --hw-plum-soft: #3A2233;
+    --hw-pumpkin:   #F2A65A;
+    --hw-text:      #FBEFF4;
+    --hw-muted:     #C9B3BF;
+  }
+  [data-theme="spooky"] {
+    --cream:      var(--hw-bg);
+    --cream-card: var(--hw-surface);
+    --sage:       var(--hw-pink);
+    --sage-deep:  var(--hw-pink);
+    --sage-soft:  var(--hw-plum);
+    --coral:      var(--hw-pink-deep);
+    --coral-soft: var(--hw-plum-soft);
+    --rose:       var(--hw-pink-deep);
+    --rose-soft:  var(--hw-plum-soft);
+    --ink:        var(--hw-text);
+    --ink-soft:   var(--hw-muted);
+  }
+
+  /* page glow instead of the warm rose/sage blobs */
+  [data-theme="spooky"] body {
+    background-color: var(--hw-bg);
+    background-image:
+      radial-gradient(closest-side at 12% 8%,  rgba(229,143,180,0.14), transparent),
+      radial-gradient(closest-side at 92% 4%,  rgba(242,166,90,0.08),  transparent),
+      radial-gradient(closest-side at 85% 88%, rgba(229,143,180,0.12), transparent);
+  }
+  [data-theme="spooky"] .backbar { background: linear-gradient(var(--hw-bg) 72%, rgba(26,20,24,0)); }
+
+  /* chips re-tinted for dark */
+  [data-theme="spooky"] .chip       { border-color: var(--hw-plum); background: var(--hw-plum-soft); color: var(--hw-text); }
+  [data-theme="spooky"] .chip.safe  { border-color:#5F8268; background:#22302A; color:#CFE9D5; }
+  [data-theme="spooky"] .chip.avoid { border-color: var(--hw-pink-deep); background:#3A2233; color: var(--hw-pink); }
+
+  /* flashcard faces on dark */
+  [data-theme="spooky"] .flash-front        { background: var(--hw-surface); }
+  [data-theme="spooky"] .flash-back.safe    { background: linear-gradient(160deg,#3F7A57,#2D8A63); }
+  [data-theme="spooky"] .flash-back.avoid   { background: linear-gradient(160deg,#B6567A,#E58FB4); }
+  [data-theme="spooky"] .flash-back.avoid .why { color:#2A1F27; }
+
+  /* buttons + back pill */
+  [data-theme="spooky"] .btn.primary { background: var(--hw-pink); color:#1A1418; }
+  [data-theme="spooky"] .back        { background: var(--hw-surface); border-color: var(--hw-plum); color: var(--hw-pink); }
+
+  /* short spooky display accent — kept readable */
+  [data-theme="spooky"] .spooky-title {
+    font-family: 'Creepster', var(--font-display);
+    letter-spacing: 1.4px;
+    color: var(--hw-pink);
+    font-weight: 400;
+  }
+
+  /* ---- Spooky-mode toggle (present in both themes, blends into each) ---- */
+  .theme-toggle {
+    position: fixed; top: 10px; right: 12px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-display); font-weight: 600; font-size: .82rem;
+    padding: 7px 13px; border-radius: 999px; cursor: pointer;
+    background: var(--cream-card); color: var(--sage-deep);
+    border: 1.5px solid var(--sage-soft); box-shadow: var(--shadow-soft);
+    transition: transform .15s ease;
+  }
+  .theme-toggle:hover { transform: translateY(-1px); }
+  .theme-toggle:focus-visible { outline: none; box-shadow: var(--ring); }
+  [data-theme="spooky"] .theme-toggle { background: var(--hw-plum); color: var(--hw-pink); border-color: var(--hw-pink-deep); }
+
+  /* ---- Halloween decorations (spooky mode only, behind content) ---- */
+  .halloween-decor { display: none; }
+  [data-theme="spooky"] .halloween-decor {
+    display: block; position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .halloween-decor .d { position: absolute; opacity: .55; }
+  .halloween-decor .d-ghost1 { top: 15%;  left: 4%;   width: 44px; }
+  .halloween-decor .d-ghost2 { bottom: 8%; right: 8%;  width: 36px; opacity:.45; }
+  .halloween-decor .d-bat1   { top: 9%;   right: 11%; width: 34px; }
+  .halloween-decor .d-bat2   { bottom: 19%; left: 9%;  width: 24px; opacity:.4; }
+  .halloween-decor .d-pumpkin{ bottom: 7%; left: 7%;  width: 40px; opacity:.6; }
+  .halloween-decor .d-web    { top: 0; right: 0; width: 86px; opacity:.3; }
+  .halloween-decor .d-star   { width: 13px; opacity:.5; }
+  .halloween-decor .d-star.s1 { top: 24%; left: 26%; }
+  .halloween-decor .d-star.s2 { top: 72%; left: 42%; }
+  .halloween-decor .d-star.s3 { top: 32%; right: 30%; }
+  /* gothic-whimsical (Burtonesque) girly motifs — all original art */
+  .halloween-decor .d-moon  { top: 5%;  left: 8%;  width: 38px; opacity:.5; }
+  .halloween-decor .d-tree  { bottom: 0; right: 1%; width: 78px; opacity:.26; }
+  .halloween-decor .d-hills { bottom: 0; left: 0;  width: 62%; max-width: 300px; opacity:.2; }
+  .halloween-decor .d-skull { top: 17%; right: 5%; width: 44px; opacity:.65; }
+  .halloween-decor .d-bow1  { top: 24%; left: 5%;  width: 22px; opacity:.6; }
+  .halloween-decor .d-bow2  { bottom: 17%; right: 11%; width: 19px; opacity:.55; }
+  @media (prefers-reduced-motion: no-preference) {
+    .halloween-decor .float   { animation: hw-float 6s ease-in-out infinite; }
+    .halloween-decor .float.slow { animation-duration: 9s; }
+    .halloween-decor .twinkle2 { animation: hw-twinkle 3s ease-in-out infinite; }
+    @keyframes hw-float   { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-12px); } }
+    @keyframes hw-twinkle { 0%,100%{ opacity:.25; transform:scale(.85); } 50%{ opacity:.7; transform:scale(1.1); } }
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  /* ---- Hero Halloween accessories (overlay only; characters untouched) ---- */
+  .hero-accessory { display: none; }
+  [data-theme="spooky"] .hero-accessory { display: inline; }
+
+  /* ---- Home love-note card ---- */
+  #home-note { text-align: center; }
+  #home-note .note-body { color: var(--ink-soft); margin: 6px 0 0; font-size: .96rem; }
+  #home-note .note-sig  { margin-top: 8px; font-family: var(--font-display); color: var(--coral); font-weight: 600; }
+
+  /* ---- Travel-kit checklist ---- */
+  .checklist { list-style: none; padding: 0; margin: 8px 0 0; }
+  .checklist label {
+    display: flex; align-items: flex-start; gap: 11px; padding: 11px 4px; cursor: pointer;
+    border-bottom: 1px dashed var(--sage-soft); font-size: .96rem;
+  }
+  .checklist li:last-child label { border-bottom: none; }
+  .checklist input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--coral); flex: 0 0 auto; cursor: pointer; }
+  .checklist input:checked + span { opacity: .6; text-decoration: line-through; }
+
+  .recipe-note { margin: 10px 0 0; font-size: .85rem; color: var(--ink-soft); font-style: italic; }
+
+  /* ---- "When it's not just a flare" — CALM in BOTH themes ---- */
+  .calm-screen .section-head h2,
+  .calm-screen .card h3 { color: #47614F; }
+  .calm-screen .card {
+    background: #FFFDFA; color: #3E4A42; border: 1px solid #E4EDE6;
+    box-shadow: 0 6px 18px rgba(92,122,107,0.10);
+  }
+  .calm-screen .card.warnlead { background: #FCEFE9; border-color: #EBD3CB; }
+  .calm-screen .lead, .calm-screen .card p, .calm-screen .card li { color: #3E4A42; }
+  .calm-screen .card strong { color: #47614F; }
+  .calm-screen ul { padding-left: 20px; margin: 6px 0 0; }
+  .calm-screen li { padding: 4px 0; }
+  .calm-screen .backbar { background: transparent; }
+  .calm-screen .back { background: #FFFDFA; color: #47614F; border: 1px solid #E4EDE6; }
+  .tile.calm-tile { border: 1.5px solid #E0B5A8; }
+  [data-theme="spooky"] .tile.calm-tile { background: #FFFDFA; color: #3E4A42; }
+  [data-theme="spooky"] .tile.calm-tile .tile-title { color: #47614F; }
+  [data-theme="spooky"] .tile.calm-tile .blurb { color: #6B7770; }
+  [data-theme="spooky"] .tile.calm-tile .blob { background: #F3E7E2; }
 </style>
+
+<script>
+  /* Set the theme before first paint so there's no flash of the wrong theme.
+     Default (no saved choice): spooky through Nov 1 2026, classic after. */
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('icapp_theme'); } catch (_) { saved = null; }
+    var theme = (saved === 'spooky' || saved === 'classic')
+      ? saved
+      : (Date.now() < Date.parse('2026-11-01T00:00:00') ? 'spooky' : 'classic');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<!-- Spooky-mode toggle. Label + behavior wired in the main script below. -->
+<button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">🦇 Spooky mode</button>
+
+<!-- Halloween decorations: original SVG only, drift gently, spooky mode only. -->
+<div class="halloween-decor" aria-hidden="true">
+  <svg class="d d-ghost1 float" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2C11 2 7 10 7 20v22l5-5 4 6 4-6 4 6 4-6 5 5V20C33 10 29 2 20 2Z" fill="#FBEFF4"/>
+    <circle cx="15" cy="20" r="2.4" fill="#2A1F27"/><circle cx="25" cy="20" r="2.4" fill="#2A1F27"/>
+    <circle cx="20" cy="26" r="1.6" fill="#E58FB4"/>
+  </svg>
+  <svg class="d d-ghost2 float slow" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2C11 2 7 10 7 20v22l5-5 4 6 4-6 4 6 4-6 5 5V20C33 10 29 2 20 2Z" fill="#F7C6D9"/>
+    <circle cx="15" cy="20" r="2.4" fill="#2A1F27"/><circle cx="25" cy="20" r="2.4" fill="#2A1F27"/>
+  </svg>
+  <svg class="d d-bat1 float" viewBox="0 0 40 24" fill="#2E2135" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 8c2-4 5-6 9-6-2 2-1 5 2 5 3 0 6-2 9-5-1 6-5 11-11 11-3 0-5-1-9-5-4 4-6 5-9 5C5 13 1 8 0 2c3 3 6 5 9 5 3 0 4-3 2-5 4 0 7 2 9 6Z"/>
+  </svg>
+  <svg class="d d-bat2 float slow" viewBox="0 0 40 24" fill="#4A2A40" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 8c2-4 5-6 9-6-2 2-1 5 2 5 3 0 6-2 9-5-1 6-5 11-11 11-3 0-5-1-9-5-4 4-6 5-9 5C5 13 1 8 0 2c3 3 6 5 9 5 3 0 4-3 2-5 4 0 7 2 9 6Z"/>
+  </svg>
+  <svg class="d d-pumpkin float" viewBox="0 0 40 36" xmlns="http://www.w3.org/2000/svg">
+    <rect x="18" y="2" width="4" height="7" rx="2" fill="#6B8E5A"/>
+    <ellipse cx="20" cy="22" rx="17" ry="13" fill="#F2A65A"/>
+    <ellipse cx="11" cy="22" rx="7" ry="13" fill="#E89445" opacity=".5"/>
+    <ellipse cx="29" cy="22" rx="7" ry="13" fill="#E89445" opacity=".5"/>
+    <path d="M13 19l4 4 4-4M23 19l4 4 4-4" stroke="#7A3A18" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M13 28q7 4 14 0" stroke="#7A3A18" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <svg class="d d-web" viewBox="0 0 90 90" fill="none" stroke="#C9B3BF" stroke-width="1.2" xmlns="http://www.w3.org/2000/svg">
+    <path d="M90 0L18 72M90 0L46 90M90 0L72 86M90 0L86 72M90 0L0 36"/>
+    <path d="M90 18Q60 30 36 72M90 36Q58 46 48 86M90 54Q74 60 70 84"/>
+  </svg>
+  <svg class="d d-star s1 twinkle2" viewBox="0 0 12 12" fill="#F2A65A" xmlns="http://www.w3.org/2000/svg"><path d="M6 0l1.4 4.6L12 6l-4.6 1.4L6 12l-1.4-4.6L0 6l4.6-1.4z"/></svg>
+  <svg class="d d-star s2 twinkle2" viewBox="0 0 12 12" fill="#F7C6D9" xmlns="http://www.w3.org/2000/svg"><path d="M6 0l1.4 4.6L12 6l-4.6 1.4L6 12l-1.4-4.6L0 6l4.6-1.4z"/></svg>
+  <svg class="d d-star s3 twinkle2" viewBox="0 0 12 12" fill="#F2A65A" xmlns="http://www.w3.org/2000/svg"><path d="M6 0l1.4 4.6L12 6l-4.6 1.4L6 12l-1.4-4.6L0 6l4.6-1.4z"/></svg>
+
+  <!-- gothic-whimsical girly motifs (original art) -->
+  <svg class="d d-moon float slow" viewBox="0 0 40 40" fill="#F7C6D9" xmlns="http://www.w3.org/2000/svg">
+    <path d="M27 2a18 18 0 1 0 11 30A14 14 0 0 1 27 2z"/>
+  </svg>
+  <svg class="d d-tree" viewBox="0 0 60 90" fill="none" stroke="#2E2135" stroke-width="2.6" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30 90V44"/>
+    <path d="M30 60c-5-3-9-3-15-11c-2 5 0 8 3 10"/>
+    <path d="M30 52c6-4 9-4 15-13c2 5-1 9-4 11"/>
+    <path d="M30 46c-4-6-5-11-3-20c-5 4-6 10-3 16"/>
+    <path d="M30 44c4-6 10-7 12-18c4 5 2 12-4 16"/>
+  </svg>
+  <svg class="d d-hills" viewBox="0 0 200 72" fill="#241A2B" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 72V40c18-16 34-16 52 0 14 12 26 10 36-2 2 8-4 14-12 16 16 4 22-6 30-16 10 14 26 16 42 4 16-12 24-8 32 2V72Z"/>
+    <path d="M44 24c0-7 10-7 10 0 0 5-6 6-6 1 0-3 3-3 3-1" fill="none" stroke="#241A2B" stroke-width="2.4"/>
+  </svg>
+  <svg class="d d-skull float" viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 3C9 3 4 11 4 21c0 7 3 10 6 12v6a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6c3-2 6-5 6-12 0-10-5-18-16-18z" fill="#FBEFF4"/>
+    <circle cx="13" cy="20" r="4.3" fill="#2A1F27"/>
+    <circle cx="27" cy="20" r="4.3" fill="#2A1F27"/>
+    <circle cx="14.2" cy="18.6" r="1.3" fill="#F7C6D9"/>
+    <circle cx="28.2" cy="18.6" r="1.3" fill="#F7C6D9"/>
+    <path d="M18.5 28c.9.9 2.1.9 3 0" stroke="#2A1F27" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M14 34h12M17 34v4M20 34v4.5M23 34v4" stroke="#2A1F27" stroke-width="1.2"/>
+    <g fill="#F7C6D9"><path d="M20 7l-6-4-1 7z"/><path d="M20 7l6-4 1 7z"/><circle cx="20" cy="7" r="2.3"/></g>
+  </svg>
+  <svg class="d d-bow1 float slow" viewBox="0 0 24 16" fill="#F7C6D9" xmlns="http://www.w3.org/2000/svg"><path d="M12 8L3 2 2 14zM12 8l9-6 1 12z"/><circle cx="12" cy="8" r="2.6"/></svg>
+  <svg class="d d-bow2 float" viewBox="0 0 24 16" fill="#E58FB4" xmlns="http://www.w3.org/2000/svg"><path d="M12 8L3 2 2 14zM12 8l9-6 1 12z"/><circle cx="12" cy="8" r="2.6"/></svg>
+</div>
 
 <div class="wrap">
 
@@ -646,6 +877,21 @@
           <path d="M150 44 c-3-6-14-4-14 3 0 6 8 10 14 15 6-5 14-9 14-15 0-7-11-9-14-3z" fill="#E48AA6"/>
           <path d="M168 66 c-1.6-3.2-7.5-2-7.5 1.6 0 3.2 4.3 5.4 7.5 8 3.2-2.6 7.5-4.8 7.5-8 0-3.6-5.9-4.8-7.5-1.6z" fill="#EEA7BE"/>
           <text x="36" y="70" font-size="12" fill="#E48AA6" opacity=".7">✨</text>
+
+          <!-- Halloween accessories — OVERLAY only (spooky mode); the panda and
+               bear shapes above are not modified. A witch hat perches on the
+               bear; tiny bat wings sit on the panda's head. -->
+          <g class="hero-accessory">
+            <ellipse cx="78" cy="90" rx="22" ry="5" fill="#241A2B"/>
+            <path d="M58 90 Q78 93 98 87 L84 56 Q81 52 78 57 Z" fill="#2E2135"/>
+            <path d="M62 84 Q78 88 94 81" stroke="#F7C6D9" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <circle cx="88" cy="72" r="3" fill="#F2A65A"/>
+          </g>
+          <g class="hero-accessory">
+            <path d="M132 74 q-10 -8 -20 -4 q6 1 6 6 q5 -4 14 2 z" fill="#2E2135"/>
+            <path d="M132 74 q10 -8 20 -4 q-6 1 -6 6 q-5 -4 -14 2 z" fill="#2E2135"/>
+            <ellipse cx="132" cy="75" rx="3" ry="4" fill="#2E2135"/>
+          </g>
         </svg>
       </figure>
 
@@ -654,8 +900,18 @@
         Tap a card whenever you need a reminder.</p>
     </section>
 
+    <!-- Home love-note. Text lives in the HOME_NOTE constant in the script. -->
+    <div id="home-note" class="card rosecard"></div>
+
     <!-- CATEGORY TILES · order mirrors the "learn → eat → do" flow ---------- -->
     <nav class="tiles" aria-label="Sections">
+      <button class="tile span calm-tile" data-goto="notflare">
+        <span class="blob"></span>
+        <span class="emoji">⚠️</span>
+        <span class="tile-title">When it's not just a flare</span>
+        <span class="blurb">Signs it's worth a same-day doctor visit.</span>
+      </button>
+
       <button class="tile span" data-goto="what-is-ic">
         <span class="blob"></span>
         <span class="emoji" aria-hidden="true"><svg class="lily"><use href="#tigerlily"/></svg></span>
@@ -717,6 +973,42 @@
         <span class="emoji">🃏</span>
         <span class="tile-title">Safe or Avoid? · a little game</span>
         <span class="blurb">Flip the card to peek. Just for fun, no pressure.</span>
+      </button>
+
+      <!-- 🎃 Halloween cluster -->
+      <button class="tile" data-goto="treats">
+        <span class="blob"></span>
+        <span class="emoji">🍬</span>
+        <span class="tile-title">Halloween Treats</span>
+        <span class="blurb">Gentler sweets &amp; fall drinks.</span>
+      </button>
+
+      <button class="tile span" data-goto="spookykitchen">
+        <span class="blob"></span>
+        <span class="emoji">👩‍🍳</span>
+        <span class="tile-title">Spooky Kitchen</span>
+        <span class="blurb">Festive IC-safe recipes, fun to decorate.</span>
+      </button>
+
+      <button class="tile" data-goto="nightplan">
+        <span class="blob"></span>
+        <span class="emoji">🎃</span>
+        <span class="tile-title">Halloween Night Plan</span>
+        <span class="blurb">Little moves for a comfy night out.</span>
+      </button>
+
+      <button class="tile" data-goto="flarekit">
+        <span class="blob"></span>
+        <span class="emoji">🧳</span>
+        <span class="tile-title">Travel Flare Kit</span>
+        <span class="blurb">A packing checklist that remembers.</span>
+      </button>
+
+      <button class="tile" data-goto="vitamins">
+        <span class="blob"></span>
+        <span class="emoji">💊</span>
+        <span class="tile-title">My Vitamin Stack</span>
+        <span class="blurb">What's in the routine, in plain words.</span>
       </button>
     </nav>
 
@@ -1233,9 +1525,237 @@
   </section>
 
   <!-- ======================================================================
+       SCREEN: IC-SAFE HALLOWEEN TREATS 🍬
+       ====================================================================== -->
+  <section id="treats" class="screen" aria-label="IC-Safe Halloween Treats">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🍬</span>
+      <h2>IC-Safe Halloween Treats</h2>
+      <p class="lead">Spooky season, gently.</p>
+    </div>
+
+    <div class="card accent" style="margin-bottom:18px">
+      <p style="margin:0">Everyone's triggers are different. Treat these as a
+        starting point, and test new things one at a time on a calm day. 🖤</p>
+    </div>
+
+    <div class="food-group safe">
+      <h3>🍬 Usually gentler</h3>
+      <div class="chips">
+        <span class="chip safe">Plain (non-sour) gummies</span>
+        <span class="chip safe">Marshmallows</span>
+        <span class="chip safe">Caramels</span>
+        <span class="chip safe">Plain pretzels</span>
+        <span class="chip safe">Lightly salted popcorn</span>
+        <span class="chip safe">Vanilla cookies</span>
+        <span class="chip safe">Vanilla cupcakes</span>
+      </div>
+    </div>
+
+    <div class="food-group avoid">
+      <h3>⚠️ Common triggers</h3>
+      <div class="chips">
+        <span class="chip avoid">Chocolate (esp. dark)</span>
+        <span class="chip avoid">Sour candies</span>
+        <span class="chip avoid">Cinnamon-hot &amp; spicy candies</span>
+        <span class="chip avoid">Sugar-free (artificial sweeteners)</span>
+        <span class="chip avoid">Fruity hard candies (citric acid)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🍵 Fall drinks</h3>
+      <ul class="pretty">
+        <li>Pumpkin spice lattes are coffee plus extras, so they're a likely trigger.</li>
+        <li>Apple cider is often acidic — try a small amount first.</li>
+      </ul>
+      <p style="margin:12px 0 2px"><strong>Gentler options:</strong> a vanilla
+        steamer (warm milk and vanilla), chamomile tea, pear juice, or water.</p>
+    </div>
+
+    <div class="card accent">
+      <h3>🎃 Pumpkin &amp; squash are usually IC-friendly</h3>
+      <p>Two cozy recipes — roasted butternut squash and pumpkin oat bars —
+        are waiting for you in Easy Recipes.</p>
+      <button class="btn ghost" data-goto="recipes">See the pumpkin recipes →</button>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: SPOOKY KITCHEN 👩‍🍳  (festive IC-safe recipes, from SPOOKY_RECIPES)
+       ====================================================================== -->
+  <section id="spookykitchen" class="screen" aria-label="Spooky Kitchen">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">👩‍🍳</span>
+      <h2>Spooky Kitchen</h2>
+      <p class="lead">Festive, IC-friendly, and fun to decorate. 🖤</p>
+    </div>
+
+    <div class="card accent" style="margin-bottom:18px">
+      <p style="margin:0">All built from gentle, IC-safe ingredients — the
+        spooky part is just the decorating. Make them your own, and test any
+        new ingredient on a calm day.</p>
+    </div>
+
+    <div id="spooky-recipe-list"><!-- cards injected by JS --></div>
+
+    <div class="hug">
+      <span class="ic">🖤</span>
+      <span>Tip: blueberries make the cutest IC-safe "eyes" — skip the chocolate
+        chips and let the decorating be the fun part.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: HALLOWEEN NIGHT PLAN 🎃
+       ====================================================================== -->
+  <section id="nightplan" class="screen" aria-label="Halloween Night Plan">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🎃</span>
+      <h2>Halloween Night Plan</h2>
+      <p class="lead">A few little moves for a comfy night.</p>
+    </div>
+
+    <div class="card">
+      <ul class="pretty">
+        <li>Eat a real meal before going out, with protein and carbs — like chicken and rice or a plain burger.</li>
+        <li>Drink water between drinks. Alcohol is a common trigger, so fewer drinks means fewer flare risks.</li>
+        <li>Skip citrus, cranberry, and energy-drink mixers.</li>
+        <li>Find the bathroom early, and go when you need to. Don't hold it.</li>
+        <li>Bring the flare kit.</li>
+      </ul>
+    </div>
+
+    <div class="card accent">
+      <h3>🧳 Pack ahead</h3>
+      <p>Your flare kit is a tap away — tick things off as you get ready.</p>
+      <button class="btn ghost" data-goto="flarekit">Open the flare kit →</button>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: TRAVEL FLARE KIT 🧳   (checklist persisted: icapp_kit_checklist)
+       ====================================================================== -->
+  <section id="flarekit" class="screen" aria-label="Travel Flare Kit">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🧳</span>
+      <h2>Travel Flare Kit</h2>
+      <p class="lead">Tap to tick things off as you pack. Your checkmarks are saved on this device.</p>
+    </div>
+
+    <div class="card">
+      <ul class="checklist">
+        <li><label><input type="checkbox" id="kit-0"><span>Heat patches (adhesive warmers)</span></label></li>
+        <li><label><input type="checkbox" id="kit-1"><span>Calcium glycerophosphate, to take with meals and drinks</span></label></li>
+        <li><label><input type="checkbox" id="kit-2"><span>Tylenol</span></label></li>
+        <li><label><input type="checkbox" id="kit-3"><span>AZO (short-term use only)</span></label></li>
+        <li><label><input type="checkbox" id="kit-4"><span>Refillable water bottle</span></label></li>
+        <li><label><input type="checkbox" id="kit-5"><span>Safe snacks: pretzels, plain crackers, a banana</span></label></li>
+        <li><label><input type="checkbox" id="kit-6"><span>Comfy layers</span></label></li>
+        <li><label><input type="checkbox" id="kit-7"><span>A note on your phone listing the supplements you take</span></label></li>
+      </ul>
+    </div>
+
+    <div class="card accent">
+      <p style="margin:0 0 10px">ℹ️ AZO is for short-term use only — it's worth
+        knowing when a flare might be something else.</p>
+      <button class="btn ghost" data-goto="notflare">When it's not just a flare →</button>
+    </div>
+
+    <div class="hug">
+      <span class="ic">🚻</span>
+      <span>On road trips, plan bathroom stops — don't hold it. At the airport,
+        buy water after security and sip steadily instead of chugging.</span>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: MY VITAMIN STACK 💊
+       ====================================================================== -->
+  <section id="vitamins" class="screen" aria-label="My Vitamin Stack">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">💊</span>
+      <h2>My Vitamin Stack</h2>
+      <p class="lead">Kept general — always check with a doctor or pharmacist.</p>
+    </div>
+
+    <div class="card">
+      <h3>🌵 Desert Harvest Low-Acid Multi-Vitamin (without B6)</h3>
+      <ul class="pretty">
+        <li>Made for people with IC and acid sensitivity.</li>
+        <li>Has no vitamin B6, and uses buffered vitamin C (calcium ascorbate) instead of plain ascorbic acid.</li>
+        <li>Check the label: it may already contain calcium glycerophosphate. If so, ask a pharmacist whether the total dose is right with the standalone one.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🧂 Calcium Glycerophosphate</h3>
+      <ul class="pretty">
+        <li>Taken with meals and drinks to lower their acidity.</li>
+        <li>A good habit before something that might be a trigger.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>💧 D-Mannose <span class="meta">occasional</span></h3>
+      <ul class="pretty">
+        <li>Meant to help prevent UTIs, not IC. It doesn't calm bladder-wall irritation.</li>
+        <li>Research is mixed: some studies found fewer repeat UTIs, and a larger 2024 trial found no benefit.</li>
+        <li><strong>It does not treat an active UTI.</strong> It's never a reason to skip getting checked.</li>
+      </ul>
+    </div>
+
+    <div class="card coralcard">
+      <h3>📋 Good to know</h3>
+      <ul class="pretty">
+        <li><strong>Calcium and antibiotics:</strong> calcium can block some antibiotics used for UTIs, such as cipro and doxycycline. If prescribed one, take it a few hours apart from calcium products and the multivitamin, and tell the pharmacist about the supplements.</li>
+        <li>Show this list to anyone who prescribes something new.</li>
+        <li>Talk to a doctor or pharmacist before starting or stopping anything.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SCREEN: WHEN IT'S NOT JUST A FLARE ⚠️
+       Calm styling in BOTH themes — no spooky decorations, no playful title.
+       ====================================================================== -->
+  <section id="notflare" class="screen calm-screen" aria-label="When it's not just a flare">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">⚠️</span>
+      <h2>When it's not just a flare</h2>
+      <p class="lead">A quick gut-check for when to get seen.</p>
+    </div>
+
+    <div class="card warnlead">
+      <p style="margin:0 0 6px"><strong>Get same-day medical care if any of these show up:</strong></p>
+      <ul>
+        <li>Kidney or flank pain (back or side, above the waist). This is <strong>not</strong> a typical IC symptom.</li>
+        <li>Fever or chills</li>
+        <li>Nausea or vomiting along with urinary pain</li>
+        <li>Visible blood in urine</li>
+        <li>Pain that's clearly worse or different from usual flares</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <p style="margin:0"><strong>Tip:</strong> AZO turns urine orange and can
+        throw off urine tests. If a UTI is possible, give a urine sample
+        <em>before</em> taking AZO when you can.</p>
+    </div>
+  </section>
+
+  <!-- ======================================================================
        PERSISTENT FOOTER / DISCLAIMER
        ====================================================================== -->
   <footer>
+    <p style="margin:0 0 8px">For comfort and reference only — not medical
+      advice. Check with a doctor or pharmacist.</p>
     <div class="sig">made with love, for you 💗</div>
   </footer>
 
@@ -1385,6 +1905,37 @@
         'Serve over rice with sliced avocado on top.',
       ],
     },
+    {
+      name: 'Roasted Butternut Squash',
+      emoji: '🎃',
+      meta: '~30 min',
+      ingredients: [
+        'Butternut squash, peeled & cubed',
+        'Olive oil',
+        'A pinch of salt',
+      ],
+      steps: [
+        'Toss the squash cubes in olive oil and a pinch of salt.',
+        'Roast at 400°F for 25–30 minutes until golden.',
+      ],
+    },
+    {
+      name: 'Pumpkin Oat Bars',
+      emoji: '🧡',
+      meta: '~25 min',
+      ingredients: [
+        'Oats',
+        'Plain canned pumpkin (not pie filling)',
+        'Banana',
+        'A little maple syrup',
+        'A light pinch of cinnamon',
+      ],
+      steps: [
+        'Mash the banana, then stir in pumpkin, oats, maple syrup & cinnamon.',
+        'Spread into a pan and bake at 350°F for about 25 minutes.',
+      ],
+      note: 'Go light on spices, and skip chocolate chips.',
+    },
   ];
 
   // Build recipe cards
@@ -1396,8 +1947,96 @@
       <ul>${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
       <h4>how to</h4>
       <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+      ${r.note ? `<p class="recipe-note">💡 ${r.note}</p>` : ''}
     </article>
   `).join('');
+
+  /* ========================================================================
+     🎃 SPOOKY KITCHEN  —  festive, decoratable, IC-safe recipes.
+     `decorate` holds the Halloween-touch idea. Edit / add cards here.
+     ======================================================================== */
+  const SPOOKY_RECIPES = [
+    {
+      name: 'Mummy Chicken Tenders',
+      emoji: '🧟',
+      meta: '~25 min',
+      ingredients: [
+        'Chicken breast, cut into strips',
+        'Refrigerated bread or pizza dough (or puff pastry)',
+        'Olive oil, salt',
+        'Plain yogurt or a mild dip, for "eyes"',
+      ],
+      steps: [
+        'Wrap thin strips of dough around each chicken strip like bandages, leaving a little gap near the top.',
+        'Brush with olive oil and bake at 400°F for ~18–20 min, until the chicken is cooked through.',
+        'Dab two tiny dots of plain yogurt in the gap for spooky little eyes.',
+      ],
+      decorate: 'Leave gaps in the "bandages" so the chicken peeks through — that\'s where the eyes go.',
+    },
+    {
+      name: 'Ghostly Mashed Potato Clouds',
+      emoji: '👻',
+      meta: '~30 min',
+      ingredients: [
+        'Potatoes',
+        'Butter, a splash of milk, salt',
+        'Blueberries, for eyes',
+      ],
+      steps: [
+        'Boil and mash the potatoes with butter, milk and salt until smooth.',
+        'Pipe or spoon tall "ghost" mounds onto a tray; bake at 400°F for ~12 min to lightly set.',
+        'Press in blueberries for little eyes.',
+      ],
+      decorate: 'Pipe them tall and wobbly — the lumpier, the cuter. Blueberry eyes keep it IC-safe.',
+    },
+    {
+      name: "Jack-o'-Lantern Stuffed Squash",
+      emoji: '🎃',
+      meta: '~40 min',
+      ingredients: [
+        'Small squash or mini pumpkin',
+        'Cooked chicken and rice',
+        'Olive oil, basil, salt',
+      ],
+      steps: [
+        'Halve and seed the squash; rub with olive oil and roast at 400°F for ~25 min.',
+        'Fill with warm chicken and rice seasoned with basil and salt.',
+        'Serve with a little carved face for the full effect.',
+      ],
+      decorate: "Carve a friendly jack-o'-lantern face into the squash skin before roasting.",
+    },
+    {
+      name: 'Boo-nana Ghost Pops',
+      emoji: '🍌',
+      meta: '~10 min',
+      ingredients: [
+        'Bananas, halved',
+        'A little plain yogurt',
+        'Blueberries, for eyes',
+        'Popsicle sticks (optional)',
+      ],
+      steps: [
+        'Push a stick into each banana half (optional).',
+        'Drizzle or dip with plain yogurt so they look ghostly.',
+        'Add blueberry eyes and a tiny yogurt smile.',
+      ],
+      decorate: 'Freeze 1–2 hours for a firmer pop. Blueberry eyes instead of chocolate chips keeps it gentle.',
+    },
+  ];
+
+  const spookyList = document.getElementById('spooky-recipe-list');
+  if (spookyList) {
+    spookyList.innerHTML = SPOOKY_RECIPES.map(r => `
+      <article class="card recipe">
+        <h3>${r.emoji} ${r.name} <span class="meta">${r.meta}</span></h3>
+        <h4>you'll need</h4>
+        <ul>${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+        <h4>how to</h4>
+        <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+        ${r.decorate ? `<p class="recipe-note">🎃 Spooky touch: ${r.decorate}</p>` : ''}
+      </article>
+    `).join('');
+  }
 
   /* ========================================================================
      FLASHCARDS DATA  —  "Safe or Avoid?" game.
@@ -1470,4 +2109,67 @@
   document.getElementById('flash-flip').addEventListener('click', (e) => { e.stopPropagation(); flip(); });
   document.getElementById('flash-next').addEventListener('click', (e) => { e.stopPropagation(); next(); });
   renderCard();
+
+  /* ========================================================================
+     🖤 HOME LOVE-NOTE  —  edit the text here, in one place.
+     ======================================================================== */
+  const HOME_NOTE = {
+    title: 'Feliz Halloween, mi amor 🖤',
+    body:  "Your favorite holiday deserved its own version. Same app, a little spookier.",
+    sig:   '— Irving',
+  };
+  (function renderHomeNote() {
+    const el = document.getElementById('home-note');
+    if (!el) return;
+    el.innerHTML =
+      '<h3 class="spooky-title">' + HOME_NOTE.title + '</h3>' +
+      '<p class="note-body">' + HOME_NOTE.body + '</p>' +
+      '<p class="note-sig">' + HOME_NOTE.sig + '</p>';
+  })();
+
+  /* ========================================================================
+     🦇 SPOOKY MODE TOGGLE
+     Stored under the NEW key `icapp_theme` ("spooky" | "classic").
+     The initial theme was already applied by the head script (no flash);
+     here we just wire the button and persist changes. All storage in try/catch.
+     ======================================================================== */
+  (function themeToggle() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    const root = document.documentElement;
+    const current = () => (root.getAttribute('data-theme') === 'spooky' ? 'spooky' : 'classic');
+    function paint() {
+      const t = current();
+      btn.textContent = (t === 'spooky' ? '🦇 Spooky mode' : '🌼 Classic mode');
+      btn.setAttribute('aria-pressed', String(t === 'spooky'));
+      btn.setAttribute('aria-label',
+        t === 'spooky' ? 'Spooky mode is on. Activate to switch to classic mode.'
+                       : 'Classic mode is on. Activate to switch to spooky mode.');
+    }
+    function setTheme(t) {
+      root.setAttribute('data-theme', t);
+      try { localStorage.setItem('icapp_theme', t); } catch (_) { /* storage blocked — still switches for this visit */ }
+      paint();
+    }
+    btn.addEventListener('click', () => setTheme(current() === 'spooky' ? 'classic' : 'spooky'));
+    paint();
+  })();
+
+  /* ========================================================================
+     🧳 TRAVEL FLARE KIT CHECKLIST  —  persisted under NEW key
+     `icapp_kit_checklist` (a JSON map of checked ids). All storage in try/catch.
+     ======================================================================== */
+  (function flareKit() {
+    const KEY = 'icapp_kit_checklist';
+    const boxes = Array.from(document.querySelectorAll('#flarekit input[type="checkbox"]'));
+    if (!boxes.length) return;
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { saved = {}; }
+    boxes.forEach((b) => { if (saved[b.id]) b.checked = true; });
+    boxes.forEach((b) => b.addEventListener('change', () => {
+      const state = {};
+      boxes.forEach((x) => { if (x.checked) state[x.id] = true; });
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* storage blocked — ticks just won't persist */ }
+    }));
+  })();
 </script>
