@@ -1200,11 +1200,6 @@
       </div>
       <div id="plans-someday"><!-- someday cards injected by JS --></div>
     </div>
-
-    <div class="hug">
-      <span class="ic">💞</span>
-      <span>Counting down the days with you.</span>
-    </div>
   </section>
 
   <!-- ======================================================================
@@ -2047,8 +2042,11 @@
   const FALLBACK_EVENTS = [
     { title: 'Trip to Salem 🍂',          start: '2026-10-16', end: '2026-10-18',
       link: 'https://irxgon1305.notion.site/Saleem-2026-3ea68f714e108027ac5cf7c93a8bdfc2?source=copy_link' },
-    { title: 'Winery with her parents 🍇', start: '2026-10-24' },
-    { title: 'Medellín, Colombia ✈️',      start: '2026-11-18' },
+    { title: '6-month anniversary dinner 🕯️', start: '2026-10-20' },
+    { title: 'Winery with her parents 🍇', start: '2026-10-24',
+      link: 'https://barreloak.com/', linkLabel: 'Visit the winery →' },
+    { title: 'Medellín, Colombia ✈️',      start: '2026-11-18', end: '2026-11-24' },
+    { title: 'Thanksgiving with her parents 🦃', start: '2026-11-26' },
   ];
 
   // Trips we're dreaming up but haven't dated yet. `when` is free text;
@@ -2065,9 +2063,12 @@
     const somedayList = document.getElementById('plans-someday');
     if (!list) return;
     const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const WD  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const weekdays = (s, e) => (e && e.toDateString() !== s.toDateString())
+      ? WD[s.getDay()] + '–' + WD[e.getDay()] : WD[s.getDay()];
 
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    const linkBtn = (url) => url ? `<a class="plan-link" href="${esc(url)}" target="_blank" rel="noopener">View itinerary →</a>` : '';
+    const linkBtn = (url, label) => url ? `<a class="plan-link" href="${esc(url)}" target="_blank" rel="noopener">${esc(label || 'View itinerary →')}</a>` : '';
     const parseDate = (s) => {
       if (!s) return null;
       const d = s.length <= 10 ? new Date(s + 'T00:00:00') : new Date(s);
@@ -2078,7 +2079,6 @@
       const diff = Math.round((start - today) / 86400000);
       if (diff <= 0) return 'today 💗';
       if (diff === 1) return 'tomorrow';
-      if (diff <= 6) return 'this week · in ' + diff + ' days';
       return 'in ' + diff + ' days';
     };
     const dayRange = (s, e) => {
@@ -2089,7 +2089,7 @@
     function render(events) {
       const now = new Date(); now.setHours(0,0,0,0);
       const upcoming = events
-        .map(ev => ({ title: ev.title, link: ev.link, _s: parseDate(ev.start), _e: parseDate(ev.end) }))
+        .map(ev => ({ title: ev.title, link: ev.link, linkLabel: ev.linkLabel, _s: parseDate(ev.start), _e: parseDate(ev.end) }))
         .filter(ev => ev._s && (ev._s >= now || (ev._e && ev._e >= now)))
         .sort((a, b) => a._s - b._s);
       if (!upcoming.length) {
@@ -2104,8 +2104,8 @@
           </div>
           <div class="plan-body">
             <h3>${esc(ev.title)}</h3>
-            <p class="plan-when">${relative(ev._s)}</p>
-            ${linkBtn(ev.link)}
+            <p class="plan-when">${weekdays(ev._s, ev._e)} · ${relative(ev._s)}</p>
+            ${linkBtn(ev.link, ev.linkLabel)}
           </div>
         </article>`).join('');
     }
@@ -2119,7 +2119,7 @@
           <div class="plan-body">
             <h3>${esc(ev.title)}</h3>
             <p class="plan-when">${esc(ev.when || 'Date TBD')}</p>
-            ${linkBtn(ev.link)}
+            ${linkBtn(ev.link, ev.linkLabel)}
           </div>
         </article>`).join('');
     }
