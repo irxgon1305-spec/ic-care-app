@@ -614,6 +614,19 @@
 
   .recipe-note { margin: 10px 0 0; font-size: .85rem; color: var(--ink-soft); font-style: italic; }
 
+  /* Our Plans — event cards with a date badge */
+  .plan { display: flex; align-items: stretch; gap: 0; padding: 0; overflow: hidden; }
+  .plan .plan-date {
+    flex: 0 0 74px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: var(--sage-soft); color: var(--sage-deep); font-family: var(--font-display); padding: 12px 6px;
+  }
+  .plan .plan-date .d-mon { font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; }
+  .plan .plan-date .d-day { font-size: 1.45rem; font-weight: 700; line-height: 1; }
+  .plan .plan-body { padding: 14px 16px; flex: 1; }
+  .plan .plan-body h3 { margin: 0 0 3px; font-size: 1.05rem; }
+  .plan .plan-when { margin: 0; font-size: .85rem; color: var(--ink-soft); }
+  .plans-note { text-align: center; font-size: .78rem; color: var(--ink-soft); margin: 4px 0 2px; }
+
   /* ---- "When it's not just a flare" — CALM in BOTH themes ---- */
   .calm-screen .section-head h2,
   .calm-screen .card h3 { color: #47614F; }
@@ -1086,6 +1099,13 @@
 
     <!-- CATEGORY TILES · order mirrors the "learn → eat → do" flow ---------- -->
     <nav class="tiles" aria-label="Sections">
+      <button class="tile" data-goto="plans">
+        <span class="blob"></span>
+        <span class="emoji">🗓️</span>
+        <span class="tile-title">Our Plans</span>
+        <span class="blurb">Little adventures to look forward to.</span>
+      </button>
+
       <button class="tile" data-goto="what-is-ic">
         <span class="blob"></span>
         <span class="emoji" aria-hidden="true"><svg class="lily"><use href="#tigerlily"/></svg></span>
@@ -1151,6 +1171,28 @@
         not a rulebook — the real expert on your body is <em>you</em>.</span>
     </div>
   </main>
+
+  <!-- ======================================================================
+       SCREEN: OUR PLANS  (events). Renders FALLBACK_EVENTS, and live-syncs from
+       a public Google Calendar once GCAL_ID + GCAL_KEY are set in the script.
+       ====================================================================== -->
+  <section id="plans" class="screen" aria-label="Our Plans">
+    <div class="backbar"><button class="back" data-back>← Back home</button></div>
+    <div class="section-head">
+      <span class="emoji">🗓️</span>
+      <h2>Our Plans</h2>
+      <p class="lead">Little adventures to look forward to, together. 💗</p>
+    </div>
+
+    <div id="plans-list"><!-- event cards injected by JS --></div>
+
+    <p id="plans-note" class="plans-note"></p>
+
+    <div class="hug">
+      <span class="ic">💞</span>
+      <span>Counting down the days with you.</span>
+    </div>
+  </section>
 
   <!-- ======================================================================
        SCREEN: UNDERSTANDING IC  (combined: what IC is, flares, cycle, body)
@@ -1975,6 +2017,88 @@
       '<h3 class="spooky-title">' + HOME_NOTE.title + '</h3>' +
       '<p class="note-body">' + HOME_NOTE.body + '</p>' +
       '<p class="note-sig">' + HOME_NOTE.sig + '</p>';
+  })();
+
+  /* ========================================================================
+     🗓️ OUR PLANS  —  events.
+     Shows FALLBACK_EVENTS right away, and live-syncs from a PUBLIC Google
+     Calendar once GCAL_ID and GCAL_KEY are filled in below (read-only API key,
+     restricted to this site's domain in the Google Cloud console).
+     ======================================================================== */
+  const GCAL_ID  = '';   // e.g. 'abc123@group.calendar.google.com'  (once public)
+  const GCAL_KEY = '';   // read-only Google API key, referrer-restricted to the site
+
+  // Edit freely — these show until the calendar sync is configured, and as a
+  // fallback if the calendar can't be reached.
+  const FALLBACK_EVENTS = [
+    { title: 'Trip to Salem 🍂',           start: '2026-10-16', end: '2026-10-18' },
+    { title: 'Winery with her parents 🍇',  start: '2026-10-24' },
+    { title: 'Medellín, Colombia ✈️',       start: '2026-11-18' },
+  ];
+
+  (function ourPlans() {
+    const list = document.getElementById('plans-list');
+    const note = document.getElementById('plans-note');
+    if (!list) return;
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const parseDate = (s) => {
+      if (!s) return null;
+      const d = s.length <= 10 ? new Date(s + 'T00:00:00') : new Date(s);
+      return isNaN(d) ? null : d;
+    };
+    const relative = (start) => {
+      const today = new Date(); today.setHours(0,0,0,0);
+      const diff = Math.round((start - today) / 86400000);
+      if (diff <= 0) return 'today 💗';
+      if (diff === 1) return 'tomorrow';
+      if (diff <= 6) return 'this week · in ' + diff + ' days';
+      return 'in ' + diff + ' days';
+    };
+    const dayRange = (s, e) => {
+      if (!e || e.toDateString() === s.toDateString()) return String(s.getDate());
+      return s.getMonth() === e.getMonth() ? s.getDate() + '–' + e.getDate() : String(s.getDate());
+    };
+
+    function render(events) {
+      const now = new Date(); now.setHours(0,0,0,0);
+      const upcoming = events
+        .map(ev => ({ title: ev.title, _s: parseDate(ev.start), _e: parseDate(ev.end) }))
+        .filter(ev => ev._s && (ev._s >= now || (ev._e && ev._e >= now)))
+        .sort((a, b) => a._s - b._s);
+      if (!upcoming.length) {
+        list.innerHTML = '<div class="card"><p style="margin:0;text-align:center">No upcoming plans yet — add one to your calendar 💕</p></div>';
+        return;
+      }
+      list.innerHTML = upcoming.map(ev => `
+        <article class="card plan">
+          <div class="plan-date">
+            <span class="d-mon">${MON[ev._s.getMonth()]}</span>
+            <span class="d-day">${dayRange(ev._s, ev._e)}</span>
+          </div>
+          <div class="plan-body">
+            <h3>${ev.title}</h3>
+            <p class="plan-when">${relative(ev._s)}</p>
+          </div>
+        </article>`).join('');
+    }
+
+    render(FALLBACK_EVENTS);
+
+    if (GCAL_ID && GCAL_KEY) {
+      const url = 'https://www.googleapis.com/calendar/v3/calendars/'
+        + encodeURIComponent(GCAL_ID) + '/events?key=' + encodeURIComponent(GCAL_KEY)
+        + '&singleEvents=true&orderBy=startTime&maxResults=25&timeMin=' + new Date().toISOString();
+      fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(data => {
+        const evs = (data.items || []).map(it => {
+          const allDay = !!(it.start && it.start.date);
+          let end = (it.end && (it.end.date || it.end.dateTime)) || '';
+          if (allDay && end) { const d = new Date(end + 'T00:00:00'); d.setDate(d.getDate() - 1); end = d.toISOString().slice(0, 10); }
+          return { title: it.summary || 'Plan', start: (it.start && (it.start.date || it.start.dateTime)) || '', end };
+        }).filter(e => e.start);
+        if (evs.length) { render(evs); if (note) note.textContent = 'Synced from your shared calendar 🗓️'; }
+      }).catch(() => { /* keep the fallback list */ });
+    }
   })();
 
   /* ========================================================================
