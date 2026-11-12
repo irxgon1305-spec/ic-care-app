@@ -14,12 +14,14 @@ and a low-stakes "Safe or Avoid?" flashcard game.
 - **Easy Recipes** — simple, IC-friendly meals
 - **Gentle Daily Habits** — small everyday comforts
 - **Safe or Avoid?** — a flip-card game, just for fun
+- **Birth Control, Explained** — three estrogen-free options compared, myth vs. fact, FAQ, and a saved doctor-questions checklist
 
 ## 🛠️ Tech
 
 - A single, self-contained `index.html` — HTML, CSS, and JavaScript inline.
-- **No build step, no backend, no database, no browser storage.** All state
-  lives in memory.
+- **No build step, no backend, no database.** The only thing saved is a little
+  `localStorage` on the device: the theme choice and checklist ticks (keys
+  start with `icapp_`). That saved data never leaves the device.
 - Mobile-first, keyboard accessible, and respects reduced-motion preferences.
 
 ## 🚀 Running locally
