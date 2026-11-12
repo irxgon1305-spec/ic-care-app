@@ -676,23 +676,23 @@
   }
   .bc-option .bc-vibe { margin: 0 0 4px; color: var(--ink-soft); }
   .bc-option h4 {
-    font-family: var(--font-display); font-size: .95rem; color: var(--coral);
+    font-family: var(--font-display); font-size: .95rem; color: var(--sage-deep);
     margin: 14px 0 0; letter-spacing: .2px;
   }
   .bc-option ul.pretty { margin-top: 2px; }
 
   /* quick-compare table: a real table on wider screens, stacked rows on phones */
-  .bc-compare { width: 100%; border-collapse: collapse; font-size: .88rem; line-height: 1.45; }
+  .bc-compare { --bc-line: rgba(92, 122, 107, 0.42); width: 100%; border-collapse: collapse; font-size: .88rem; line-height: 1.45; }
   .bc-compare th, .bc-compare td {
     padding: 8px 6px; text-align: left; vertical-align: top;
-    border-bottom: 1px dashed var(--sage-soft);
+    border-bottom: 1.5px solid var(--bc-line);
   }
   .bc-compare tr:last-child th, .bc-compare tr:last-child td { border-bottom: none; }
   .bc-compare thead th { font-family: var(--font-display); color: var(--sage-deep); font-size: .9rem; }
   .bc-compare tbody th { font-family: var(--font-display); color: var(--sage-deep); font-weight: 700; }
   @media (max-width: 479px) {
     .bc-compare thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-    .bc-compare tbody tr { display: block; padding: 8px 0; border-bottom: 1px dashed var(--sage-soft); }
+    .bc-compare tbody tr { display: block; padding: 10px 0; border-bottom: 1.5px solid var(--bc-line); }
     .bc-compare tbody tr:last-child { border-bottom: none; }
     .bc-compare tbody th { display: block; padding: 0 0 4px; border: none; }
     .bc-compare td { display: grid; grid-template-columns: 7.4em 1fr; gap: 8px; padding: 2px 0; border: none; }
@@ -703,7 +703,7 @@
   #birthcontrol ul.pretty li::before { content: "🌸"; font-size: .85rem; top: 7px; }
 
   /* per-option "questions people ask" block at the bottom of each option card */
-  .bc-extras { margin-top: 16px; padding-top: 4px; border-top: 1.5px dashed var(--rose); }
+  .bc-extras { margin-top: 16px; padding-top: 4px; border-top: 1.5px dashed var(--sage-soft); }
 
   /* FAQ — native <details>, dressed like a card, with a soft rotating chevron */
   .faq {
@@ -805,9 +805,7 @@
   .bc-option .faq summary::after { right: 8px; }
   .bc-option .faq .faq-body { padding: 0 2px 12px; }
   [data-theme="spooky"] .bc-extras { border-top-color: var(--hw-plum); }
-  [data-theme="spooky"] .bc-compare th,
-  [data-theme="spooky"] .bc-compare td,
-  [data-theme="spooky"] .bc-compare tbody tr { border-color: var(--hw-plum); }
+  [data-theme="spooky"] .bc-compare { --bc-line: rgba(229, 143, 180, 0.38); }
 </style>
 
 <script>
