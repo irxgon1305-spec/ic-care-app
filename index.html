@@ -667,7 +667,15 @@
      Default (no saved choice): classic. Spooky stays available via the toggle. */
   (function () {
     var saved = null;
-    try { saved = localStorage.getItem('icapp_theme'); } catch (_) { saved = null; }
+    try {
+      // One-time reset after Halloween 2026: choices saved during the spooky
+      // season are cleared back to classic once (marker: icapp_theme_reset).
+      if (localStorage.getItem('icapp_theme_reset') !== '2026-11') {
+        localStorage.setItem('icapp_theme', 'classic');
+        localStorage.setItem('icapp_theme_reset', '2026-11');
+      }
+      saved = localStorage.getItem('icapp_theme');
+    } catch (_) { saved = null; }
     var theme = (saved === 'spooky' || saved === 'classic') ? saved : 'classic';
     document.documentElement.setAttribute('data-theme', theme);
   })();
