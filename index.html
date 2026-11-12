@@ -699,19 +699,36 @@
     .bc-compare td::before { content: attr(data-label); font-weight: 700; color: var(--sage-deep); }
   }
 
-  /* myth-vs-fact: the existing flip card, in a grid of shorter cards */
-  .myth-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
-  .myth-grid .flashcard { display: block; width: 100%; max-width: none; aspect-ratio: 16 / 10; font: inherit; color: inherit; }
-  .myth-grid .flash-inner { display: block; }
-  .myth-grid .flash-face { padding: 16px 18px; gap: 6px; }
-  .myth-grid .flash-front .myth-q { font-family: var(--font-display); font-size: 1.08rem; color: var(--sage-deep); font-weight: 600; }
-  .myth-grid .flash-back .verdict { font-size: 1.3rem; }
-  .myth-grid .flash-back .why { max-width: 34ch; font-size: .88rem; line-height: 1.45; }
-  .myth-grid .flashcard:focus-visible { outline: none; }
-  .myth-grid .flashcard:focus-visible .flash-face { box-shadow: var(--ring), var(--shadow); }
+  /* cute bullets for this section (the leaf stays everywhere else) */
+  #birthcontrol ul.pretty li::before { content: "🌸"; font-size: .85rem; top: 7px; }
+
+  /* per-option "myths + questions" block at the bottom of each option card */
+  .bc-extras { margin-top: 16px; padding-top: 4px; border-top: 1.5px dashed var(--rose); }
+  .bc-option .bc-extras h4 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
+  .bc-extras .hint { font-family: var(--font-body); font-weight: 600; font-size: .74rem; color: var(--ink-soft); }
+
+  /* myth-vs-fact: the existing flip card, in a swipeable carousel row */
+  .myth-row {
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain; scrollbar-width: thin;
+    padding: 6px 2px 12px; margin: 4px -2px 0;
+  }
+  .myth-row .flashcard {
+    display: block; flex: 0 0 86%; max-width: none; aspect-ratio: 16 / 10;
+    scroll-snap-align: start; font: inherit; color: inherit;
+  }
+  .myth-row .flashcard:only-child { flex-basis: 100%; }
+  .myth-row .flash-inner { display: block; }
+  .myth-row .flash-face { padding: 16px 18px; gap: 6px; box-shadow: var(--shadow-soft); }
+  .myth-row .flash-front { background: var(--rose-soft); }
+  .myth-row .flash-front .myth-q { font-family: var(--font-display); font-size: 1.05rem; color: var(--sage-deep); font-weight: 600; }
+  .myth-row .flash-back .verdict { font-size: 1.3rem; }
+  .myth-row .flash-back .why { max-width: 34ch; font-size: .88rem; line-height: 1.45; }
+  .myth-row .flashcard:focus-visible { outline: none; }
+  .myth-row .flashcard:focus-visible .flash-face { box-shadow: var(--ring), var(--shadow-soft); }
   @media (min-width: 560px) {
-    .myth-grid { grid-template-columns: 1fr 1fr; }
-    .myth-grid .flashcard { aspect-ratio: 5 / 4; }
+    .myth-row .flashcard { flex-basis: 62%; aspect-ratio: 3 / 2; }
+    .myth-row .flashcard:only-child { flex-basis: 100%; aspect-ratio: 16 / 7; }
   }
 
   /* FAQ — native <details>, dressed like a card, with a soft rotating chevron */
@@ -743,6 +760,19 @@
   .bc-sources { margin: 18px 4px 0; font-size: .74rem; line-height: 1.55; color: var(--ink-soft); text-align: center; }
 
   [data-theme="spooky"] .faq { border: 1px dashed rgba(229,143,180,0.20); }
+
+  /* questions nested inside an option card: flat rows with dashed dividers */
+  .bc-option .faq,
+  [data-theme="spooky"] .bc-option .faq {
+    background: transparent; box-shadow: none; border: none; border-radius: 0;
+    border-bottom: 1px dashed var(--sage-soft); margin: 0;
+  }
+  .bc-option .faq:last-child,
+  [data-theme="spooky"] .bc-option .faq:last-child { border-bottom: none; }
+  .bc-option .faq summary { padding: 11px 32px 11px 2px; border-radius: var(--radius-sm); font-size: .97rem; }
+  .bc-option .faq summary::after { right: 8px; }
+  .bc-option .faq .faq-body { padding: 0 2px 12px; }
+  [data-theme="spooky"] .bc-extras { border-top-color: var(--hw-plum); }
   [data-theme="spooky"] .bc-compare th,
   [data-theme="spooky"] .bc-compare td,
   [data-theme="spooky"] .bc-compare tbody tr { border-color: var(--hw-plum); }
@@ -1862,7 +1892,7 @@
     </div>
 
     <article class="card bc-option">
-      <h3>💊 The mini-pill (norethindrone 0.35 mg) <span class="meta">Camila · Errin · Heather</span></h3>
+      <h3>💊 The mini-pill (norethindrone 0.35 mg) <span class="meta">Brands: Camila · Errin · Heather</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> the classic, low-key option, but it needs a strict routine.</p>
       <h4>How it works</h4>
       <ul class="pretty">
@@ -1887,6 +1917,30 @@
       <ul class="pretty">
         <li>Fertility comes back quickly after stopping.</li>
       </ul>
+
+      <div class="bc-extras">
+        <h4>🔄 Myth or fact? <span class="hint">Tap to flip</span></h4>
+        <div class="myth-row">
+          <button class="flashcard" type="button" aria-pressed="false">
+            <span class="flash-inner">
+              <span class="flash-face flash-front"><span class="myth-q">"The mini-pill works fine if you take it whenever."</span><span class="tap-hint">Tap to flip</span></span>
+              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">The mini-pill needs a 3-hour window. Slynd gives you 24 hours.</span></span>
+            </span>
+          </button>
+        </div>
+        <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>What if I'm late with the mini-pill?</summary>
+          <div class="faq-body"><p>Take it as soon as you remember and use backup (like condoms) for the next 48 hours.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Do GLP-1 medicines affect the mini-pill?</summary>
+          <div class="faq-body">
+            <p>They can. GLP-1-type medicines slow digestion, and some, like tirzepatide (Mounjaro, Zepbound), carry a label warning that birth control pills may work less reliably. That label advises adding backup (like condoms) or switching to a non-pill method for 4 weeks after starting and for 4 weeks after each dose increase.</p>
+            <p>Nausea and throwing up are common side effects too, and throwing up within a few hours of a mini-pill counts as a missed pill. Not every GLP-1 medicine carries this warning, so ask your doctor or pharmacist about yours.</p>
+          </div>
+        </details>
+      </div>
     </article>
 
     <article class="card bc-option">
@@ -1918,10 +1972,25 @@
       <ul class="pretty">
         <li>Fertility comes back quickly after stopping, like other pills.</li>
       </ul>
+
+      <div class="bc-extras">
+        <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>What are Slynd's green pills?</summary>
+          <div class="faq-body"><p>Inactive pills, so a light period may come then. Some doctors say to skip them for fewer periods; ask yours.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Do GLP-1 medicines affect Slynd?</summary>
+          <div class="faq-body">
+            <p>They can, the same way as other pills. Some GLP-1-type medicines, like tirzepatide (Mounjaro, Zepbound), carry a label warning that birth control pills may work less reliably, and advise adding backup (like condoms) or switching to a non-pill method for 4 weeks after starting and for 4 weeks after each dose increase.</p>
+            <p>If you throw up soon after a pill, check the pack insert for what to do. Not every GLP-1 medicine carries this warning, so ask your doctor or pharmacist about yours.</p>
+          </div>
+        </details>
+      </div>
     </article>
 
     <article class="card bc-option">
-      <h3>🌀 Hormonal IUD (levonorgestrel) <span class="meta">Kyleena · Mirena · Liletta · Skyla</span></h3>
+      <h3>🌀 Hormonal IUD (levonorgestrel) <span class="meta">Brands: Kyleena · Mirena · Liletta · Skyla</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> set it and forget it.</p>
       <h4>How it works</h4>
       <ul class="pretty">
@@ -1940,7 +2009,7 @@
       <ul class="pretty">
         <li>Insertion usually means a few minutes of strong cramping. Ask your doctor what pain relief they offer.</li>
         <li>Spotting is common for the first 3–6 months.</li>
-        <li>Small chance it slips out. Removing it takes an office visit.</li>
+        <li>Small chance it slips out: in Mirena's clinical trials, about 4.5 in 100 people (roughly 1 in 22) had it come out over 5 years. Removing it takes an office visit.</li>
       </ul>
       <h4>🧠 Mood</h4>
       <ul class="pretty">
@@ -1950,6 +2019,88 @@
       <ul class="pretty">
         <li>Fertility comes back <strong>right after removal</strong>. There's no waiting period.</li>
       </ul>
+
+      <div class="bc-extras">
+        <h4>🔄 Myth or fact? <span class="hint">Tap to flip · swipe for more</span></h4>
+        <div class="myth-row">
+          <button class="flashcard" type="button" aria-pressed="false">
+            <span class="flash-inner">
+              <span class="flash-face flash-front"><span class="myth-q">"You can't get pregnant for a year after an IUD."</span><span class="tap-hint">Tap to flip</span></span>
+              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Fertility comes back right after an IUD is removed. The long wait (6–18 months) belongs to the <strong>Depo shot</strong>, not IUDs.</span></span>
+            </span>
+          </button>
+          <button class="flashcard" type="button" aria-pressed="false">
+            <span class="flash-inner">
+              <span class="flash-face flash-front"><span class="myth-q">"IUDs are only for people who've had kids."</span><span class="tap-hint">Tap to flip</span></span>
+              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Doctors' groups (ACOG and the CDC) say IUDs are fine whether or not you've given birth.</span></span>
+            </span>
+          </button>
+          <button class="flashcard" type="button" aria-pressed="false">
+            <span class="flash-inner">
+              <span class="flash-face flash-front"><span class="myth-q">"An IUD means no periods ever again."</span><span class="tap-hint">Tap to flip</span></span>
+              <span class="flash-face flash-back safe"><span class="verdict">Not exactly.</span><span class="why">Some people stop having periods, many just get lighter ones, and they come back after removal.</span></span>
+            </span>
+          </button>
+        </div>
+        <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>Does IUD insertion hurt?</summary>
+          <div class="faq-body"><p>Usually it's strong cramping for a few minutes. It can be more uncomfortable if you haven't given birth. Ask what numbing or pain relief your doctor offers.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Can a partner feel the IUD?</summary>
+          <div class="faq-body"><p>You can't feel it. A partner sometimes feels the strings at first, and the doctor can trim them.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Can an IUD fall out or move?</summary>
+          <div class="faq-body"><p>It's uncommon: in Mirena's clinical trials, about 4.5 in 100 people had it come out over 5 years. You'll get a follow-up visit and learn to check the strings.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Do GLP-1 medicines affect the IUD?</summary>
+          <div class="faq-body"><p>No. It works right in the uterus, so the slower digestion from GLP-1-type medicines doesn't change anything.</p></div>
+        </details>
+      </div>
+    </article>
+
+    <article class="card bc-option">
+      <h3>🌷 Good to know for all three</h3>
+      <div class="bc-extras" style="border-top:none; margin-top:0; padding-top:0">
+        <h4>🔄 Myth or fact? <span class="hint">Tap to flip</span></h4>
+        <div class="myth-row">
+          <button class="flashcard" type="button" aria-pressed="false">
+            <span class="flash-inner">
+              <span class="flash-face flash-front"><span class="myth-q">"Estrogen-free means hormone-free."</span><span class="tap-hint">Tap to flip</span></span>
+              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">All three options here use a progestin. Only the copper IUD has no hormones at all.</span></span>
+            </span>
+          </button>
+        </div>
+        <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>Do antibiotics stop the pill from working?</summary>
+          <div class="faq-body"><p>Most don't. A few do, like rifampin (a TB drug) and some seizure medicines. Always tell the pharmacist you're on birth control.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Do the supplements in the Supplement Stack interact with these?</summary>
+          <div class="faq-body">
+            <p>None of them are known to make these options work less well. The low-acid multivitamin, calcium glycerophosphate, and D-mannose aren't known to interfere with progestins. Supplements that can, like St. John's wort, aren't on the list.</p>
+            <ul class="pretty">
+              <li><strong>Mini-pill:</strong> no known interaction with the stack.</li>
+              <li><strong>Slynd:</strong> no known interaction with the stack. Because Slynd can raise potassium, ask before adding any potassium supplement.</li>
+              <li><strong>Hormonal IUD:</strong> no known interaction with the stack.</li>
+            </ul>
+            <p>Either way, keep birth control on the list you show anyone who prescribes something new.</p>
+            <button class="btn ghost" data-goto="vitamins" style="margin-top:6px">See the Supplement Stack →</button>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>Will birth control make me gain weight?</summary>
+          <div class="faq-body"><p>Weight changes aren't a known side effect of the mini-pill. Weight gain is listed as a possible Slynd side effect. Bodies differ, so track how you feel.</p></div>
+        </details>
+        <details class="faq">
+          <summary>What if I don't like it?</summary>
+          <div class="faq-body"><p>You can stop a pill any day. An IUD can be removed at any office visit. You can always switch.</p></div>
+        </details>
+      </div>
     </article>
 
     <div class="card rosecard">
@@ -1968,111 +2119,6 @@
         </tbody>
       </table>
     </div>
-
-    <div class="subhead">
-      <span class="emoji">🔄</span>
-      <h3>Myth or fact? Tap to flip.</h3>
-    </div>
-    <div class="myth-grid">
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"You can't get pregnant for a year after an IUD."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Fertility comes back right after an IUD is removed. The long wait (6–18 months) belongs to the <strong>Depo shot</strong>, not IUDs.</span></span>
-        </span>
-      </button>
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"Estrogen-free means hormone-free."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">All three options here use a progestin. Only the copper IUD has no hormones at all.</span></span>
-        </span>
-      </button>
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"IUDs are only for people who've had kids."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Doctors' groups (ACOG and the CDC) say IUDs are fine whether or not you've given birth.</span></span>
-        </span>
-      </button>
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"The mini-pill works fine if you take it whenever."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">The mini-pill needs a 3-hour window. Slynd gives you 24 hours.</span></span>
-        </span>
-      </button>
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"An IUD means no periods ever again."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back safe"><span class="verdict">Not exactly.</span><span class="why">Some people stop having periods, many just get lighter ones, and they come back after removal.</span></span>
-        </span>
-      </button>
-      <button class="flashcard" type="button" aria-pressed="false">
-        <span class="flash-inner">
-          <span class="flash-face flash-front"><span class="myth-q">"Birth control protects against STIs."</span><span class="tap-hint">Tap to flip</span></span>
-          <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">None of these do. Only condoms do.</span></span>
-        </span>
-      </button>
-    </div>
-
-    <div class="subhead">
-      <span class="emoji">❓</span>
-      <h3>Questions people ask most</h3>
-    </div>
-    <details class="faq">
-      <summary>What if I'm late with the mini-pill?</summary>
-      <div class="faq-body"><p>Take it as soon as you remember and use backup (like condoms) for the next 48 hours.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Do antibiotics stop the pill from working?</summary>
-      <div class="faq-body"><p>Most don't. A few do, like rifampin (a TB drug) and some seizure medicines. Always tell the pharmacist you're on birth control.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Do GLP-1 medicines affect these options?</summary>
-      <div class="faq-body">
-        <p>Some can. GLP-1-type medicines slow digestion, and some of them, like tirzepatide (Mounjaro, Zepbound), carry a label warning that birth control pills may work less reliably. Here's how that plays out for each option:</p>
-        <ul class="pretty">
-          <li><strong>Mini-pill:</strong> the tirzepatide label advises adding backup (like condoms) or switching to a non-pill method for 4 weeks after starting and for 4 weeks after each dose increase. Nausea and throwing up are common side effects too, and throwing up within a few hours of a mini-pill counts as a missed pill.</li>
-          <li><strong>Slynd:</strong> the same pill caution applies, including the 4 weeks of backup after starting and after each dose increase. If you throw up soon after a pill, check the pack insert for what to do.</li>
-          <li><strong>Hormonal IUD:</strong> not affected. It works right in the uterus, so slower digestion doesn't change anything.</li>
-        </ul>
-        <p>Not every GLP-1 medicine carries this warning, so ask your doctor or pharmacist about yours, and bring it up again whenever the dose changes.</p>
-      </div>
-    </details>
-    <details class="faq">
-      <summary>Do the supplements in the Supplement Stack interact with these?</summary>
-      <div class="faq-body">
-        <p>None of them are known to make these options work less well. The low-acid multivitamin, calcium glycerophosphate, and D-mannose aren't known to interfere with progestins. Supplements that can, like St. John's wort, aren't on the list.</p>
-        <ul class="pretty">
-          <li><strong>Mini-pill:</strong> no known interaction with the stack.</li>
-          <li><strong>Slynd:</strong> no known interaction with the stack. Because Slynd can raise potassium, ask before adding any potassium supplement.</li>
-          <li><strong>Hormonal IUD:</strong> no known interaction with the stack.</li>
-        </ul>
-        <p>Either way, keep birth control on the list you show anyone who prescribes something new.</p>
-        <button class="btn ghost" data-goto="vitamins" style="margin-top:6px">See the Supplement Stack →</button>
-      </div>
-    </details>
-    <details class="faq">
-      <summary>What are Slynd's green pills?</summary>
-      <div class="faq-body"><p>Inactive pills, so a light period may come then. Some doctors say to skip them for fewer periods; ask yours.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Does IUD insertion hurt?</summary>
-      <div class="faq-body"><p>Usually it's strong cramping for a few minutes. It can be more uncomfortable if you haven't given birth. Ask what numbing or pain relief your doctor offers.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Can a partner feel the IUD?</summary>
-      <div class="faq-body"><p>You can't feel it. A partner sometimes feels the strings at first, and the doctor can trim them.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Can an IUD fall out or move?</summary>
-      <div class="faq-body"><p>It's uncommon. You'll get a follow-up visit and learn to check the strings.</p></div>
-    </details>
-    <details class="faq">
-      <summary>Will birth control make me gain weight?</summary>
-      <div class="faq-body"><p>Weight changes aren't a known side effect of the mini-pill. Weight gain is listed as a possible Slynd side effect. Bodies differ, so track how you feel.</p></div>
-    </details>
-    <details class="faq">
-      <summary>What if I don't like it?</summary>
-      <div class="faq-body"><p>You can stop a pill any day. An IUD can be removed at any office visit. You can always switch.</p></div>
-    </details>
 
     <div class="card coralcard" style="margin-top:18px">
       <h3>📝 Questions for my doctor</h3>
@@ -2562,7 +2608,7 @@
      flare kit: a JSON map of checked ids). All storage in try/catch.
      ======================================================================== */
   (function mythCards() {
-    document.querySelectorAll('#birthcontrol .myth-grid .flashcard').forEach((card) => {
+    document.querySelectorAll('#birthcontrol .myth-row .flashcard').forEach((card) => {
       card.addEventListener('click', () => {
         const flipped = card.classList.toggle('flipped');
         card.setAttribute('aria-pressed', String(flipped));
