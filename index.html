@@ -664,13 +664,11 @@
 
 <script>
   /* Set the theme before first paint so there's no flash of the wrong theme.
-     Default (no saved choice): spooky through Nov 1 2026, classic after. */
+     Default (no saved choice): classic. Spooky stays available via the toggle. */
   (function () {
     var saved = null;
     try { saved = localStorage.getItem('icapp_theme'); } catch (_) { saved = null; }
-    var theme = (saved === 'spooky' || saved === 'classic')
-      ? saved
-      : (Date.now() < Date.parse('2026-11-01T00:00:00') ? 'spooky' : 'classic');
+    var theme = (saved === 'spooky' || saved === 'classic') ? saved : 'classic';
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>
@@ -1100,8 +1098,6 @@
         Tap a card whenever you need a reminder.</p>
     </section>
 
-    <!-- Home love-note. Text lives in the HOME_NOTE constant in the script. -->
-    <div id="home-note" class="card rosecard"></div>
 
     <!-- CATEGORY TILES · order mirrors the "learn → eat → do" flow ---------- -->
     <nav class="tiles" aria-label="Sections">
@@ -2013,23 +2009,6 @@
   }
 
   /* ========================================================================
-     🖤 HOME LOVE-NOTE  —  edit the text here, in one place.
-     ======================================================================== */
-  const HOME_NOTE = {
-    title: 'Feliz Halloween, mi amor 🖤',
-    body:  "Your favorite holiday deserved its own version. Same app, a little spookier.",
-    sig:   '— Irving',
-  };
-  (function renderHomeNote() {
-    const el = document.getElementById('home-note');
-    if (!el) return;
-    el.innerHTML =
-      '<h3 class="spooky-title">' + HOME_NOTE.title + '</h3>' +
-      '<p class="note-body">' + HOME_NOTE.body + '</p>' +
-      '<p class="note-sig">' + HOME_NOTE.sig + '</p>';
-  })();
-
-  /* ========================================================================
      🗓️ OUR PLANS  —  events.
      Shows FALLBACK_EVENTS right away, and live-syncs from a PUBLIC Google
      Calendar once GCAL_ID and GCAL_KEY are filled in below (read-only API key,
@@ -2052,8 +2031,14 @@
     { title: 'Drunk Dracula 🧛',          start: '2026-10-29',
       detail: 'The Sage Theatre · 7:00 PM · stage-side seats',
       link: 'https://drunkdracula.com', linkLabel: 'See the show →' },
-    { title: 'Medellín, Colombia ✈️',      start: '2026-11-18', end: '2026-11-24' },
-    { title: 'Thanksgiving with her parents 🦃', start: '2026-11-26' },
+    { title: 'Lunch with Irving\'s parents 🍽️', start: '2026-11-15',
+      detail: 'Sunday lunch · location TBD' },
+    // One combined trip, one Notion page.
+    { title: 'Colombia + Puerto Rico ✈️🏝️', start: '2026-11-18', end: '2026-11-30',
+      detail: 'Medellín Wed Nov 18 – Wed Nov 25 · Puerto Rico Wed Nov 25 – Mon Nov 30',
+      link: 'https://curvy-cone-0d2.notion.site/Medell-n-Puerto-Rico-2026-3ff0f8c19462812aabf3f220a235d352?source=copy_link' },
+    { title: 'Thanksgiving in Puerto Rico 🦃', start: '2026-11-26',
+      detail: 'With her family — aunt, uncle & cousins too 🧡' },
     { title: 'Dracula ballet 🩰🖤',        start: '2027-02-14',
       detail: "Valentine's Day · Harman Hall · 2:00 PM",
       link: 'https://www.washingtonballet.org/events/dracula/', linkLabel: 'See the ballet →' },
@@ -2063,7 +2048,6 @@
   // add `link:` here too if a Notion page exists.
   const SOMEDAY_PLANS = [
     { title: 'Trip to Mexico 🌮',                when: 'January' },
-    { title: 'Puerto Rico with her parents 🏝️',  when: 'Date TBD' },
   ];
 
   (function ourPlans() {
