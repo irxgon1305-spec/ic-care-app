@@ -14,7 +14,7 @@ and a low-stakes "Safe or Avoid?" flashcard game.
 - **Easy Recipes** — simple, IC-friendly meals
 - **Gentle Daily Habits** — small everyday comforts
 - **Safe or Avoid?** — a flip-card game, just for fun
-- **Birth Control, Explained** — three estrogen-free options compared, myth vs. fact, FAQ, and a saved doctor-questions checklist
+- **Birth Control, Explained** — three estrogen-free options compared, with common questions answered for each
 
 ## 🛠️ Tech
 

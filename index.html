@@ -663,7 +663,7 @@
 
   /* ========================================================================
      🌸 BIRTH CONTROL, EXPLAINED
-     Reuses .card / ul.pretty / .checklist; only the pieces that
+     Reuses .card / ul.pretty; only the pieces that
      didn't exist yet live here (option meta pills, compare table, FAQ).
      ======================================================================== */
   .tiles > .tile:last-child:nth-child(even) { grid-column: 1 / -1; } /* odd tile out spans, so the grid stays tidy */
@@ -1845,7 +1845,7 @@
   </section>
 
   <!-- ======================================================================
-       SCREEN: BIRTH CONTROL, EXPLAINED 🌸   (checklist persisted: icapp_bc_questions)
+       SCREEN: BIRTH CONTROL, EXPLAINED 🌸
        General info only — no personal history on this public page.
        ====================================================================== -->
   <section id="birthcontrol" class="screen" aria-label="Birth Control, Explained">
@@ -2101,20 +2101,6 @@
           <tr><th scope="row">Pregnant after?</th><td data-label="Mini-pill">Quickly</td><td data-label="Slynd">Quickly</td><td data-label="Hormonal IUD">Right away</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="card coralcard" style="margin-top:18px">
-      <h3>📝 Questions for my doctor</h3>
-      <p style="margin:0"><em>Tick the ones you want to ask. Your checks are saved on this device.</em></p>
-      <ul class="checklist">
-        <li><label><input type="checkbox" id="bcq-0"><span>Which option fits my bleeding pattern best?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-1"><span>Could my birth control be affecting my bladder or IC flares?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-2"><span>If I've had mood side effects on another method before, how do we watch for that, and what's the plan if it happens?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-3"><span>Are my migraines the kind "with aura," and does that change anything?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-4"><span>If I try an IUD, which dose do you suggest, and what pain relief do you offer?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-5"><span>Does my insurance cover Slynd or an IUD?</span></label></li>
-        <li><label><input type="checkbox" id="bcq-6"><span>If I switch, do I need backup protection, and for how long?</span></label></li>
-      </ul>
     </div>
 
     <div class="hug">
@@ -2585,22 +2571,7 @@
     }));
   })();
 
-  /* ========================================================================
-     🌸 BIRTH CONTROL — "Questions for my doctor"
-     checklist, persisted under NEW key `icapp_bc_questions` (same shape as the
-     flare kit: a JSON map of checked ids). All storage in try/catch.
-     ======================================================================== */
-  (function bcQuestions() {
-    const KEY = 'icapp_bc_questions';
-    const boxes = Array.from(document.querySelectorAll('#birthcontrol input[type="checkbox"]'));
-    if (!boxes.length) return;
-    let saved = {};
-    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { saved = {}; }
-    boxes.forEach((b) => { if (saved[b.id]) b.checked = true; });
-    boxes.forEach((b) => b.addEventListener('change', () => {
-      const state = {};
-      boxes.forEach((x) => { if (x.checked) state[x.id] = true; });
-      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* storage blocked — ticks just won't persist */ }
-    }));
-  })();
+  /* 🌸 The birth-control "Questions for my doctor" checklist was removed;
+     clear any ticks it saved (key `icapp_bc_questions`) so nothing lingers. */
+  try { localStorage.removeItem('icapp_bc_questions'); } catch (_) { /* storage blocked — nothing to clear */ }
 </script>
