@@ -663,7 +663,7 @@
 
   /* ========================================================================
      🌸 BIRTH CONTROL, EXPLAINED
-     Reuses .card / ul.pretty / .flashcard / .checklist; only the pieces that
+     Reuses .card / ul.pretty / .checklist; only the pieces that
      didn't exist yet live here (option meta pills, compare table, FAQ).
      ======================================================================== */
   .tiles > .tile:last-child:nth-child(even) { grid-column: 1 / -1; } /* odd tile out spans, so the grid stays tidy */
@@ -702,34 +702,8 @@
   /* cute bullets for this section (the leaf stays everywhere else) */
   #birthcontrol ul.pretty li::before { content: "🌸"; font-size: .85rem; top: 7px; }
 
-  /* per-option "myths + questions" block at the bottom of each option card */
+  /* per-option "questions people ask" block at the bottom of each option card */
   .bc-extras { margin-top: 16px; padding-top: 4px; border-top: 1.5px dashed var(--rose); }
-  .bc-option .bc-extras h4 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
-  .bc-extras .hint { font-family: var(--font-body); font-weight: 600; font-size: .74rem; color: var(--ink-soft); }
-
-  /* myth-vs-fact: the existing flip card, in a swipeable carousel row */
-  .myth-row {
-    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain; scrollbar-width: thin;
-    padding: 6px 2px 12px; margin: 4px -2px 0;
-  }
-  .myth-row .flashcard {
-    display: block; flex: 0 0 86%; max-width: none; aspect-ratio: 16 / 10;
-    scroll-snap-align: start; font: inherit; color: inherit;
-  }
-  .myth-row .flashcard:only-child { flex-basis: 100%; }
-  .myth-row .flash-inner { display: block; }
-  .myth-row .flash-face { padding: 16px 18px; gap: 6px; box-shadow: var(--shadow-soft); }
-  .myth-row .flash-front { background: var(--rose-soft); }
-  .myth-row .flash-front .myth-q { font-family: var(--font-display); font-size: 1.05rem; color: var(--sage-deep); font-weight: 600; }
-  .myth-row .flash-back .verdict { font-size: 1.3rem; }
-  .myth-row .flash-back .why { max-width: 34ch; font-size: .88rem; line-height: 1.45; }
-  .myth-row .flashcard:focus-visible { outline: none; }
-  .myth-row .flashcard:focus-visible .flash-face { box-shadow: var(--ring), var(--shadow-soft); }
-  @media (min-width: 560px) {
-    .myth-row .flashcard { flex-basis: 62%; aspect-ratio: 3 / 2; }
-    .myth-row .flashcard:only-child { flex-basis: 100%; aspect-ratio: 16 / 7; }
-  }
 
   /* FAQ — native <details>, dressed like a card, with a soft rotating chevron */
   .faq {
@@ -1919,16 +1893,11 @@
       </ul>
 
       <div class="bc-extras">
-        <h4>🔄 Myth or fact? <span class="hint">Tap to flip</span></h4>
-        <div class="myth-row">
-          <button class="flashcard" type="button" aria-pressed="false">
-            <span class="flash-inner">
-              <span class="flash-face flash-front"><span class="myth-q">"The mini-pill works fine if you take it whenever."</span><span class="tap-hint">Tap to flip</span></span>
-              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">The mini-pill needs a 3-hour window. Slynd gives you 24 hours.</span></span>
-            </span>
-          </button>
-        </div>
         <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>Does the mini-pill work if I take it whenever?</summary>
+          <div class="faq-body"><p>No. The mini-pill needs a 3-hour window. Slynd gives you 24 hours.</p></div>
+        </details>
         <details class="faq">
           <summary>What if I'm late with the mini-pill?</summary>
           <div class="faq-body"><p>Take it as soon as you remember and use backup (like condoms) for the next 48 hours.</p></div>
@@ -2021,28 +1990,19 @@
       </ul>
 
       <div class="bc-extras">
-        <h4>🔄 Myth or fact? <span class="hint">Tap to flip · swipe for more</span></h4>
-        <div class="myth-row">
-          <button class="flashcard" type="button" aria-pressed="false">
-            <span class="flash-inner">
-              <span class="flash-face flash-front"><span class="myth-q">"You can't get pregnant for a year after an IUD."</span><span class="tap-hint">Tap to flip</span></span>
-              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Fertility comes back right after an IUD is removed. The long wait (6–18 months) belongs to the <strong>Depo shot</strong>, not IUDs.</span></span>
-            </span>
-          </button>
-          <button class="flashcard" type="button" aria-pressed="false">
-            <span class="flash-inner">
-              <span class="flash-face flash-front"><span class="myth-q">"IUDs are only for people who've had kids."</span><span class="tap-hint">Tap to flip</span></span>
-              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">Doctors' groups (ACOG and the CDC) say IUDs are fine whether or not you've given birth.</span></span>
-            </span>
-          </button>
-          <button class="flashcard" type="button" aria-pressed="false">
-            <span class="flash-inner">
-              <span class="flash-face flash-front"><span class="myth-q">"An IUD means no periods ever again."</span><span class="tap-hint">Tap to flip</span></span>
-              <span class="flash-face flash-back safe"><span class="verdict">Not exactly.</span><span class="why">Some people stop having periods, many just get lighter ones, and they come back after removal.</span></span>
-            </span>
-          </button>
-        </div>
         <h4>❓ Questions people ask</h4>
+        <details class="faq">
+          <summary>Do I have to wait a year to get pregnant after an IUD?</summary>
+          <div class="faq-body"><p>No. Fertility comes back right after an IUD is removed. The long wait (6–18 months) belongs to the <strong>Depo shot</strong>, not IUDs.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Are IUDs only for people who've had kids?</summary>
+          <div class="faq-body"><p>No. Doctors' groups (ACOG and the CDC) say IUDs are fine whether or not you've given birth.</p></div>
+        </details>
+        <details class="faq">
+          <summary>Does an IUD mean no periods ever again?</summary>
+          <div class="faq-body"><p>Not exactly. Some people stop having periods, many just get lighter ones, and they come back after removal.</p></div>
+        </details>
         <details class="faq">
           <summary>Does IUD insertion hurt?</summary>
           <div class="faq-body"><p>Usually it's strong cramping for a few minutes. It can be more uncomfortable if you haven't given birth. Ask what numbing or pain relief your doctor offers.</p></div>
@@ -2065,40 +2025,63 @@
     <article class="card bc-option">
       <h3>🌷 Good to know for all three</h3>
       <div class="bc-extras" style="border-top:none; margin-top:0; padding-top:0">
-        <h4>🔄 Myth or fact? <span class="hint">Tap to flip</span></h4>
-        <div class="myth-row">
-          <button class="flashcard" type="button" aria-pressed="false">
-            <span class="flash-inner">
-              <span class="flash-face flash-front"><span class="myth-q">"Estrogen-free means hormone-free."</span><span class="tap-hint">Tap to flip</span></span>
-              <span class="flash-face flash-back avoid"><span class="verdict">Myth.</span><span class="why">All three options here use a progestin. Only the copper IUD has no hormones at all.</span></span>
-            </span>
-          </button>
-        </div>
         <h4>❓ Questions people ask</h4>
         <details class="faq">
-          <summary>Do antibiotics stop the pill from working?</summary>
-          <div class="faq-body"><p>Most don't. A few do, like rifampin (a TB drug) and some seizure medicines. Always tell the pharmacist you're on birth control.</p></div>
+          <summary>Does estrogen-free mean hormone-free?</summary>
+          <div class="faq-body">
+            <p>No. All three use a progestin:</p>
+            <ul class="pretty">
+              <li><strong>Mini-pill:</strong> norethindrone.</li>
+              <li><strong>Slynd:</strong> drospirenone.</li>
+              <li><strong>Hormonal IUD:</strong> levonorgestrel.</li>
+            </ul>
+            <p>Only the copper IUD has no hormones at all.</p>
+          </div>
         </details>
         <details class="faq">
-          <summary>Do the supplements in the Supplement Stack interact with these?</summary>
+          <summary>Do antibiotics stop it from working?</summary>
           <div class="faq-body">
-            <p>None of them are known to make these options work less well. The low-acid multivitamin, calcium glycerophosphate, and D-mannose aren't known to interfere with progestins. Supplements that can, like St. John's wort, aren't on the list.</p>
+            <ul class="pretty">
+              <li><strong>Mini-pill:</strong> most antibiotics don't. A few medicines do, like rifampin (a TB drug) and some seizure medicines.</li>
+              <li><strong>Slynd:</strong> same as the mini-pill. Most don't; rifampin and some seizure medicines can.</li>
+              <li><strong>Hormonal IUD:</strong> not expected to be affected, since it works right in the uterus.</li>
+            </ul>
+            <p>Always tell the pharmacist you're on birth control.</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>Do the supplements in the Supplement Stack interact with it?</summary>
+          <div class="faq-body">
             <ul class="pretty">
               <li><strong>Mini-pill:</strong> no known interaction with the stack.</li>
               <li><strong>Slynd:</strong> no known interaction with the stack. Because Slynd can raise potassium, ask before adding any potassium supplement.</li>
               <li><strong>Hormonal IUD:</strong> no known interaction with the stack.</li>
             </ul>
-            <p>Either way, keep birth control on the list you show anyone who prescribes something new.</p>
+            <p>Supplements that can interfere with progestins, like St. John's wort, aren't on the list. Keep birth control on the list you show anyone who prescribes something new.</p>
             <button class="btn ghost" data-goto="vitamins" style="margin-top:6px">See the Supplement Stack →</button>
           </div>
         </details>
         <details class="faq">
-          <summary>Will birth control make me gain weight?</summary>
-          <div class="faq-body"><p>Weight changes aren't a known side effect of the mini-pill. Weight gain is listed as a possible Slynd side effect. Bodies differ, so track how you feel.</p></div>
+          <summary>Will it make me gain weight?</summary>
+          <div class="faq-body">
+            <ul class="pretty">
+              <li><strong>Mini-pill:</strong> weight changes aren't a known side effect.</li>
+              <li><strong>Slynd:</strong> weight gain is listed as a possible side effect.</li>
+              <li><strong>Hormonal IUD:</strong> weight gain is listed as a possible side effect. In one Mirena study, 9% of people reported it, and it's unknown whether the IUD caused it.</li>
+            </ul>
+            <p>Bodies differ, so track how you feel.</p>
+          </div>
         </details>
         <details class="faq">
           <summary>What if I don't like it?</summary>
-          <div class="faq-body"><p>You can stop a pill any day. An IUD can be removed at any office visit. You can always switch.</p></div>
+          <div class="faq-body">
+            <ul class="pretty">
+              <li><strong>Mini-pill:</strong> you can stop any day.</li>
+              <li><strong>Slynd:</strong> you can stop any day.</li>
+              <li><strong>Hormonal IUD:</strong> it can be removed at any office visit.</li>
+            </ul>
+            <p>You can always switch.</p>
+          </div>
         </details>
       </div>
     </article>
@@ -2603,19 +2586,10 @@
   })();
 
   /* ========================================================================
-     🌸 BIRTH CONTROL — myth/fact flip cards + "Questions for my doctor"
+     🌸 BIRTH CONTROL — "Questions for my doctor"
      checklist, persisted under NEW key `icapp_bc_questions` (same shape as the
      flare kit: a JSON map of checked ids). All storage in try/catch.
      ======================================================================== */
-  (function mythCards() {
-    document.querySelectorAll('#birthcontrol .myth-row .flashcard').forEach((card) => {
-      card.addEventListener('click', () => {
-        const flipped = card.classList.toggle('flipped');
-        card.setAttribute('aria-pressed', String(flipped));
-      });
-    });
-  })();
-
   (function bcQuestions() {
     const KEY = 'icapp_bc_questions';
     const boxes = Array.from(document.querySelectorAll('#birthcontrol input[type="checkbox"]'));
