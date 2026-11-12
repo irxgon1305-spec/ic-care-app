@@ -685,14 +685,14 @@
   .bc-compare { width: 100%; border-collapse: collapse; font-size: .88rem; line-height: 1.45; }
   .bc-compare th, .bc-compare td {
     padding: 8px 6px; text-align: left; vertical-align: top;
-    border-bottom: 1px dashed var(--rose);
+    border-bottom: 1px dashed var(--sage-soft);
   }
   .bc-compare tr:last-child th, .bc-compare tr:last-child td { border-bottom: none; }
   .bc-compare thead th { font-family: var(--font-display); color: var(--sage-deep); font-size: .9rem; }
-  .bc-compare tbody th { font-family: var(--font-display); color: var(--coral); font-weight: 700; }
+  .bc-compare tbody th { font-family: var(--font-display); color: var(--sage-deep); font-weight: 700; }
   @media (max-width: 479px) {
     .bc-compare thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-    .bc-compare tbody tr { display: block; padding: 8px 0; border-bottom: 1px dashed var(--rose); }
+    .bc-compare tbody tr { display: block; padding: 8px 0; border-bottom: 1px dashed var(--sage-soft); }
     .bc-compare tbody tr:last-child { border-bottom: none; }
     .bc-compare tbody th { display: block; padding: 0 0 4px; border: none; }
     .bc-compare td { display: grid; grid-template-columns: 7.4em 1fr; gap: 8px; padding: 2px 0; border: none; }
@@ -744,12 +744,6 @@
   .bc-jump button:focus-visible { outline: none; box-shadow: var(--ring); }
   #birthcontrol .card { scroll-margin-top: 70px; }
 
-  .bc-glance { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 10px 0 0; }
-  .bc-glance li {
-    font-weight: 700; font-size: .76rem; line-height: 1.3;
-    color: var(--coral); background: var(--rose-soft);
-    border-radius: 999px; padding: 5px 9px; white-space: nowrap;
-  }
   .bc-toggle {
     display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
     font-family: var(--font-display); font-weight: 600; font-size: .92rem;
@@ -765,6 +759,34 @@
   .bc-toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(225deg); }
   .bc-toggle:focus-visible { outline: none; box-shadow: var(--ring); }
   .bc-details { margin-top: 4px; }
+  .bc-hide {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; margin-top: 14px; padding: 10px 16px; cursor: pointer;
+    font-family: var(--font-display); font-weight: 600; font-size: .92rem;
+    color: var(--sage-deep); background: var(--sage-soft);
+    border: none; border-radius: 999px;
+  }
+  .bc-hide::after {
+    content: ""; width: 7px; height: 7px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: translateY(2px) rotate(225deg);
+  }
+  .bc-hide:focus-visible { outline: none; box-shadow: var(--ring); }
+
+  /* back-to-top arrow (whole app): fades in once she's scrolled down */
+  .to-top {
+    position: fixed; z-index: 40;
+    right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
+    display: grid; place-items: center;
+    background: var(--sage); color: #fff; box-shadow: var(--shadow);
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+  .to-top svg { width: 20px; height: 20px; }
+  .to-top:focus-visible { outline: none; box-shadow: var(--ring), var(--shadow); }
+  [data-theme="spooky"] .to-top { background: var(--hw-pink); color: #1A1418; }
   @media (prefers-reduced-motion: reduce) { .bc-toggle::after { transition: none; } }
   [data-theme="spooky"] .bc-jump button,
   [data-theme="spooky"] .bc-toggle { border-color: var(--hw-plum); color: var(--hw-pink); }
@@ -786,7 +808,6 @@
   [data-theme="spooky"] .bc-compare th,
   [data-theme="spooky"] .bc-compare td,
   [data-theme="spooky"] .bc-compare tbody tr { border-color: var(--hw-plum); }
-  [data-theme="spooky"] .bc-compare tbody th { color: var(--hw-pumpkin); }
 </style>
 
 <script>
@@ -1908,7 +1929,7 @@
       </ul>
     </div>
 
-    <div class="card rosecard">
+    <div class="card">
       <h3>📊 Quick compare</h3>
       <table class="bc-compare">
         <thead>
@@ -1928,7 +1949,6 @@
     <article class="card bc-option" id="bc-mini">
       <h3>💊 The mini-pill (norethindrone 0.35 mg) <span class="meta">Brands: Camila · Errin · Heather</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> the classic, low-key option, but it needs a strict routine.</p>
-      <ul class="bc-glance" aria-label="At a glance"><li>Every day</li><li>3-hour window</li><li>Cheap</li></ul>
       <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-mini-details">See details</button>
       <div class="bc-details" id="bc-mini-details" hidden>
       <h4>How it works</h4>
@@ -1973,13 +1993,13 @@
           </div>
         </details>
       </div>
+      <button class="bc-hide" type="button">Hide details</button>
       </div>
     </article>
 
     <article class="card bc-option" id="bc-slynd">
       <h3>✨ Slynd (drospirenone 4 mg) <span class="meta">brand-name pill</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> the more forgiving pill.</p>
-      <ul class="bc-glance" aria-label="At a glance"><li>Every day</li><li>24-hour window</li><li>Can be pricey</li></ul>
       <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-slynd-details">See details</button>
       <div class="bc-details" id="bc-slynd-details" hidden>
       <h4>How it works</h4>
@@ -2023,13 +2043,13 @@
           </div>
         </details>
       </div>
+      <button class="bc-hide" type="button">Hide details</button>
       </div>
     </article>
 
     <article class="card bc-option" id="bc-iud">
       <h3>🌀 Hormonal IUD (levonorgestrel) <span class="meta">Brands: Kyleena · Mirena · Liletta · Skyla</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> set it and forget it.</p>
-      <ul class="bc-glance" aria-label="At a glance"><li>Not daily</li><li>Lasts 3–8 years</li><li>Usually covered</li></ul>
       <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-iud-details">See details</button>
       <div class="bc-details" id="bc-iud-details" hidden>
       <h4>How it works</h4>
@@ -2076,7 +2096,7 @@
         </details>
         <details class="faq">
           <summary>Does IUD insertion hurt?</summary>
-          <div class="faq-body"><p>Usually it's strong cramping for a few minutes. It can be more uncomfortable if you haven't given birth. Ask what numbing or pain relief your doctor offers.</p></div>
+          <div class="faq-body"><p>Usually it's strong cramping for a few minutes. It can be more uncomfortable if you haven't given birth. Ask what numbing or pain relief your doctor offers.</p><p>A rare risk: the IUD can push into the wall of the uterus during insertion (called perforation). That happens in about 1 in 1,000 insertions or fewer.</p></div>
         </details>
         <details class="faq">
           <summary>Can a partner feel the IUD?</summary>
@@ -2091,6 +2111,7 @@
           <div class="faq-body"><p>No. It works right in the uterus, so the slower digestion from GLP-1-type medicines doesn't change anything.</p></div>
         </details>
       </div>
+      <button class="bc-hide" type="button">Hide details</button>
       </div>
     </article>
 
@@ -2174,6 +2195,10 @@
       advice. Check with a doctor or pharmacist.</p>
     <div class="sig">made with love, for you 💗</div>
   </footer>
+
+  <button id="to-top" class="to-top" type="button" aria-label="Back to top" tabindex="-1">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
 
 </div>
 
@@ -2628,7 +2653,8 @@
 
   /* ========================================================================
      🌸 BIRTH CONTROL — summary-first cards. Each option shows a short summary;
-     "See details" reveals the rest. Jump links open + scroll to a card.
+     "See details" reveals the rest, "Hide details" (top or bottom) closes it.
+     Jump links just scroll to a card.
      ======================================================================== */
   (function bcCards() {
     const sec = document.getElementById('birthcontrol');
@@ -2641,21 +2667,51 @@
       btn.setAttribute('aria-expanded', String(open));
       btn.textContent = open ? 'Hide details' : 'See details';
     }
+    function closeCard(card) {
+      const t = card.querySelector('.bc-toggle');
+      if (!t) return;
+      setOpen(t, false);
+      // bring the card's top back into view so she isn't left mid-page
+      if (card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: behavior(), block: 'start' });
+      t.focus({ preventScroll: true });
+    }
     sec.querySelectorAll('.bc-toggle').forEach((btn) => btn.addEventListener('click', () => {
       const open = btn.getAttribute('aria-expanded') !== 'true';
-      setOpen(btn, open);
-      // closing a long card from far down: bring its top back into view
-      const card = btn.closest('.bc-option');
-      if (!open && card && card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: behavior(), block: 'start' });
+      if (open) setOpen(btn, true); else closeCard(btn.closest('.bc-option'));
     }));
+    // "Hide details" at the bottom of an open card
+    sec.querySelectorAll('.bc-hide').forEach((btn) => btn.addEventListener('click', () => closeCard(btn.closest('.bc-option'))));
+    // jump links only scroll; details stay closed until she taps "See details"
     sec.querySelectorAll('[data-bc-jump]').forEach((b) => b.addEventListener('click', () => {
       const card = document.getElementById(b.dataset.bcJump);
       if (!card) return;
-      const t = card.querySelector('.bc-toggle');
-      if (t) setOpen(t, true);
       card.scrollIntoView({ behavior: behavior(), block: 'start' });
+      const t = card.querySelector('.bc-toggle');
       if (t) t.focus({ preventScroll: true });
     }));
+  })();
+
+  /* ⬆️ BACK-TO-TOP — shows after about a screen of scrolling, on every page.
+     Hidden from tab order while invisible. */
+  (function backToTop() {
+    const btn = document.getElementById('to-top');
+    if (!btn) return;
+    let shown = false;
+    function update() {
+      const show = window.scrollY > window.innerHeight * 0.8;
+      if (show === shown) return;
+      shown = show;
+      btn.classList.toggle('show', show);
+      btn.tabIndex = show ? 0 : -1;
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    btn.addEventListener('click', () => {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      const back = document.querySelector('.screen.is-active .back');
+      if (back) back.focus({ preventScroll: true });
+    });
+    update();
   })();
 
   /* 🌸 The birth-control "Questions for my doctor" checklist was removed;
