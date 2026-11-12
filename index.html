@@ -733,6 +733,42 @@
 
   .bc-sources { margin: 18px 4px 0; font-size: .74rem; line-height: 1.55; color: var(--ink-soft); text-align: center; }
 
+  /* summary-first layout: jump links, at-a-glance pills, "See details" toggle */
+  .bc-jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: -4px 0 16px; }
+  .bc-jump button {
+    font-family: var(--font-display); font-weight: 600; font-size: .76rem;
+    color: var(--sage-deep); background: var(--cream-card);
+    border: 1.5px solid var(--sage-soft); border-radius: 999px;
+    padding: 6px 8px; cursor: pointer; box-shadow: var(--shadow-soft); white-space: nowrap;
+  }
+  .bc-jump button:focus-visible { outline: none; box-shadow: var(--ring); }
+  #birthcontrol .card { scroll-margin-top: 70px; }
+
+  .bc-glance { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 10px 0 0; }
+  .bc-glance li {
+    font-weight: 700; font-size: .76rem; line-height: 1.3;
+    color: var(--coral); background: var(--rose-soft);
+    border-radius: 999px; padding: 5px 9px; white-space: nowrap;
+  }
+  .bc-toggle {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+    font-family: var(--font-display); font-weight: 600; font-size: .92rem;
+    color: var(--sage-deep); background: var(--cream-card);
+    border: 1.5px solid var(--sage-soft); border-radius: 999px;
+    padding: 8px 16px; cursor: pointer;
+  }
+  .bc-toggle::after {
+    content: ""; width: 7px; height: 7px;
+    border-right: 2px solid var(--coral); border-bottom: 2px solid var(--coral);
+    transform: translateY(-2px) rotate(45deg); transition: transform .22s ease;
+  }
+  .bc-toggle[aria-expanded="true"]::after { transform: translateY(2px) rotate(225deg); }
+  .bc-toggle:focus-visible { outline: none; box-shadow: var(--ring); }
+  .bc-details { margin-top: 4px; }
+  @media (prefers-reduced-motion: reduce) { .bc-toggle::after { transition: none; } }
+  [data-theme="spooky"] .bc-jump button,
+  [data-theme="spooky"] .bc-toggle { border-color: var(--hw-plum); color: var(--hw-pink); }
+
   [data-theme="spooky"] .faq { border: 1px dashed rgba(229,143,180,0.20); }
 
   /* questions nested inside an option card: flat rows with dashed dividers */
@@ -1856,6 +1892,13 @@
       <p class="lead"><em>Three estrogen-free options, side by side. Just the facts — the choice is always yours.</em></p>
     </div>
 
+    <nav class="bc-jump" aria-label="Jump to an option">
+      <button type="button" data-bc-jump="bc-mini">💊 Mini-pill</button>
+      <button type="button" data-bc-jump="bc-slynd">✨ Slynd</button>
+      <button type="button" data-bc-jump="bc-iud">🌀 IUD</button>
+      <button type="button" data-bc-jump="bc-all">🌷 All three</button>
+    </nav>
+
     <div class="card accent">
       <h3>💡 First, the basics</h3>
       <ul class="pretty">
@@ -1865,9 +1908,29 @@
       </ul>
     </div>
 
-    <article class="card bc-option">
+    <div class="card rosecard">
+      <h3>📊 Quick compare</h3>
+      <table class="bc-compare">
+        <thead>
+          <tr><td></td><th scope="col">Mini-pill</th><th scope="col">Slynd</th><th scope="col">Hormonal IUD</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Every day?</th><td data-label="Mini-pill">Yes</td><td data-label="Slynd">Yes</td><td data-label="Hormonal IUD">No</td></tr>
+          <tr><th scope="row">If you're late</th><td data-label="Mini-pill">3-hour window</td><td data-label="Slynd">24-hour window</td><td data-label="Hormonal IUD">—</td></tr>
+          <tr><th scope="row">Periods</th><td data-label="Mini-pill">Often unpredictable</td><td data-label="Slynd">More predictable over time</td><td data-label="Hormonal IUD">Usually much lighter</td></tr>
+          <tr><th scope="row">Cost</th><td data-label="Mini-pill">Cheap</td><td data-label="Slynd">Can be pricey</td><td data-label="Hormonal IUD">Usually covered</td></tr>
+          <tr><th scope="row">Stopping</th><td data-label="Mini-pill">Any day</td><td data-label="Slynd">Any day</td><td data-label="Hormonal IUD">Office visit</td></tr>
+          <tr><th scope="row">Pregnant after?</th><td data-label="Mini-pill">Quickly</td><td data-label="Slynd">Quickly</td><td data-label="Hormonal IUD">Right away</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <article class="card bc-option" id="bc-mini">
       <h3>💊 The mini-pill (norethindrone 0.35 mg) <span class="meta">Brands: Camila · Errin · Heather</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> the classic, low-key option, but it needs a strict routine.</p>
+      <ul class="bc-glance" aria-label="At a glance"><li>Every day</li><li>3-hour window</li><li>Cheap</li></ul>
+      <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-mini-details">See details</button>
+      <div class="bc-details" id="bc-mini-details" hidden>
       <h4>How it works</h4>
       <ul class="pretty">
         <li>One pill every day, with no breaks between packs. Every pill is active.</li>
@@ -1910,11 +1973,15 @@
           </div>
         </details>
       </div>
+      </div>
     </article>
 
-    <article class="card bc-option">
+    <article class="card bc-option" id="bc-slynd">
       <h3>✨ Slynd (drospirenone 4 mg) <span class="meta">brand-name pill</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> the more forgiving pill.</p>
+      <ul class="bc-glance" aria-label="At a glance"><li>Every day</li><li>24-hour window</li><li>Can be pricey</li></ul>
+      <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-slynd-details">See details</button>
+      <div class="bc-details" id="bc-slynd-details" hidden>
       <h4>How it works</h4>
       <ul class="pretty">
         <li>24 active pills + 4 inactive pills each pack. A light period may come during the inactive days.</li>
@@ -1956,11 +2023,15 @@
           </div>
         </details>
       </div>
+      </div>
     </article>
 
-    <article class="card bc-option">
+    <article class="card bc-option" id="bc-iud">
       <h3>🌀 Hormonal IUD (levonorgestrel) <span class="meta">Brands: Kyleena · Mirena · Liletta · Skyla</span></h3>
       <p class="bc-vibe"><em>The vibe:</em> set it and forget it.</p>
+      <ul class="bc-glance" aria-label="At a glance"><li>Not daily</li><li>Lasts 3–8 years</li><li>Usually covered</li></ul>
+      <button class="bc-toggle" type="button" aria-expanded="false" aria-controls="bc-iud-details">See details</button>
+      <div class="bc-details" id="bc-iud-details" hidden>
       <h4>How it works</h4>
       <ul class="pretty">
         <li>A small, flexible T-shaped device placed in the uterus during an office visit.</li>
@@ -2020,9 +2091,10 @@
           <div class="faq-body"><p>No. It works right in the uterus, so the slower digestion from GLP-1-type medicines doesn't change anything.</p></div>
         </details>
       </div>
+      </div>
     </article>
 
-    <article class="card bc-option">
+    <article class="card bc-option" id="bc-all">
       <h3>🌷 Good to know for all three</h3>
       <div class="bc-extras" style="border-top:none; margin-top:0; padding-top:0">
         <h4>❓ Questions people ask</h4>
@@ -2085,23 +2157,6 @@
         </details>
       </div>
     </article>
-
-    <div class="card rosecard">
-      <h3>📊 Quick compare</h3>
-      <table class="bc-compare">
-        <thead>
-          <tr><td></td><th scope="col">Mini-pill</th><th scope="col">Slynd</th><th scope="col">Hormonal IUD</th></tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Every day?</th><td data-label="Mini-pill">Yes</td><td data-label="Slynd">Yes</td><td data-label="Hormonal IUD">No</td></tr>
-          <tr><th scope="row">If you're late</th><td data-label="Mini-pill">3-hour window</td><td data-label="Slynd">24-hour window</td><td data-label="Hormonal IUD">—</td></tr>
-          <tr><th scope="row">Periods</th><td data-label="Mini-pill">Often unpredictable</td><td data-label="Slynd">More predictable over time</td><td data-label="Hormonal IUD">Usually much lighter</td></tr>
-          <tr><th scope="row">Cost</th><td data-label="Mini-pill">Cheap</td><td data-label="Slynd">Can be pricey</td><td data-label="Hormonal IUD">Usually covered</td></tr>
-          <tr><th scope="row">Stopping</th><td data-label="Mini-pill">Any day</td><td data-label="Slynd">Any day</td><td data-label="Hormonal IUD">Office visit</td></tr>
-          <tr><th scope="row">Pregnant after?</th><td data-label="Mini-pill">Quickly</td><td data-label="Slynd">Quickly</td><td data-label="Hormonal IUD">Right away</td></tr>
-        </tbody>
-      </table>
-    </div>
 
     <div class="hug">
       <span class="ic">💗</span>
@@ -2568,6 +2623,38 @@
       const state = {};
       boxes.forEach((x) => { if (x.checked) state[x.id] = true; });
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* storage blocked — ticks just won't persist */ }
+    }));
+  })();
+
+  /* ========================================================================
+     🌸 BIRTH CONTROL — summary-first cards. Each option shows a short summary;
+     "See details" reveals the rest. Jump links open + scroll to a card.
+     ======================================================================== */
+  (function bcCards() {
+    const sec = document.getElementById('birthcontrol');
+    if (!sec) return;
+    const behavior = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+    function setOpen(btn, open) {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Hide details' : 'See details';
+    }
+    sec.querySelectorAll('.bc-toggle').forEach((btn) => btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      setOpen(btn, open);
+      // closing a long card from far down: bring its top back into view
+      const card = btn.closest('.bc-option');
+      if (!open && card && card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: behavior(), block: 'start' });
+    }));
+    sec.querySelectorAll('[data-bc-jump]').forEach((b) => b.addEventListener('click', () => {
+      const card = document.getElementById(b.dataset.bcJump);
+      if (!card) return;
+      const t = card.querySelector('.bc-toggle');
+      if (t) setOpen(t, true);
+      card.scrollIntoView({ behavior: behavior(), block: 'start' });
+      if (t) t.focus({ preventScroll: true });
     }));
   })();
 
